@@ -3,7 +3,6 @@ import { Row, Col } from 'react-bootstrap';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Button, Input, message } from 'antd';
-import './res/brujula.css'
 
 const Mapafijo = ({ latitud, longitud,idm }) => {
   const defaultLat = -1.0120960779505797;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Table, Select, Switch, message, Modal, Upload, Card, Tooltip, Watermark, Badge, Tag } from 'antd';
+import { Form, Input, Button, Table, Select, Switch, message, Modal, Upload, Card, Tooltip, Watermark, Badge, Tag, Divider, Drawer,Image } from 'antd';
 import { Row, Col } from 'react-bootstrap';
 import { UploadOutlined, EditFilled } from '@ant-design/icons';
 import MapaActual from './mapaactual';
@@ -22,7 +22,17 @@ const AdminSucursal = ({ idsucursalx }) => {
     const [horarioDetails, setHorarioDetails] = useState([]);
     const [horario, sethorario] = useState('mostrar');
     const [idhorario, sethorarioid] = useState(null);
+    const [openu, setOpenu] = useState(false);
 
+    const showDraweru = () => {
+        setOpenu(true);
+    };
+
+    const onCloseu = () => {
+        setOpenu(false);
+    };
+
+    
     const editarSucursal = () => {
         if (horario == 'mostrar') {
             sethorario('editar')
@@ -45,7 +55,7 @@ const AdminSucursal = ({ idsucursalx }) => {
             const formDataObject = new FormData();
             formDataObject.append('detalle', JSON.stringify(jsonHorario));
 
-            const response = await fetch('http://127.0.0.1:8000/horarios/edit/'+idhorario, {
+            const response = await fetch('http://127.0.0.1:8000/horarios/edit/' + idhorario, {
                 method: 'POST',
                 body: formDataObject,
             });
@@ -59,8 +69,8 @@ const AdminSucursal = ({ idsucursalx }) => {
                 sethorario('mostrar')
 
             } else {
-                message.error('Error al editar el horario'+
-                responseData.error);
+                message.error('Error al editar el horario' +
+                    responseData.error);
             }
         } catch (error) {
             message.error('Error al validar el formulario');
@@ -113,7 +123,7 @@ const AdminSucursal = ({ idsucursalx }) => {
             if (data.detalles) {
                 console.log('Detalles' + data.detalles[0].dia);
                 setHorarioDetails(data.detalles);
-            } 
+            }
         } catch (error) {
             message.warning('No haz creado un horario de atención para tu sucursal');
         }
@@ -140,7 +150,7 @@ const AdminSucursal = ({ idsucursalx }) => {
             }
             fetchHorarioDetails(data.mensaje[0].id_horarios);
             sethorarioid(data.mensaje[0].id_horarios);
-            
+
             setFileList([
                 {
                     uid: '-1',
@@ -233,7 +243,6 @@ const AdminSucursal = ({ idsucursalx }) => {
                     .then(response => {
                         if (response.ok) {
                             message.success('Ubicacion actualizada correctamente');
-                            onClosee(false);
                             fetchData();
                         } else {
                             throw new Error('Error al editar la ubicacion de la sucursal');
@@ -343,7 +352,16 @@ const AdminSucursal = ({ idsucursalx }) => {
                         listType="picture-card"
                         fileList={fileList}
                         onChange={handleChange}
-                        beforeUpload={() => false}
+                        beforeUpload={(file) => {
+                            const isImage = /\.(png|jpg|jpeg)$/i.test(file.name);
+                            if (isImage) {
+                                
+                                return false;
+                            }
+                            return true;
+                            message.error('Por favor, selecciona una imagen válida.');
+                        }}
+                        accept=".png, .jpg, .jpeg"
                     >
                         {fileList.length >= 1 ? null : uploadButton}
                     </Upload>
@@ -361,9 +379,9 @@ const AdminSucursal = ({ idsucursalx }) => {
     );
 
     const columns = [
-        { title: 'Datos', dataIndex: 'Datos', key: 'Datos' },
+        { dataIndex: 'Datos', key: 'Datos' },
         {
-            title: 'Valor',
+
             dataIndex: 'Valor',
             key: 'Valor',
             render: (text) => <span>{text}</span>,
@@ -372,10 +390,9 @@ const AdminSucursal = ({ idsucursalx }) => {
 
     return (
         <>
-
-            <h4>{sucursalData && (sucursalData.snombre)}</h4>
+            <Divider>{sucursalData && (sucursalData.snombre)}</Divider>
             <Row>
-                <Col md={3}>
+                <Col md={4}>
                     <Col xs={24} sm={12} md={12} lg={12}>
                         {sucursalData && (
                             <Card
@@ -383,26 +400,54 @@ const AdminSucursal = ({ idsucursalx }) => {
                                 title={sucursalData.snombre}
                                 style={{
                                     width: '100%', backgroundColor: '#CAF0EF', border: '1px solid #A4A4A4', marginTop: '5%',
-                                    height: '92%',
-                                    margin: '16px',
+                                    height: '100%',
                                     marginLeft: '1px',
                                 }}
                                 cover={
                                     sucursalData.id_ubicacion.longitud ? (
-                                        <div style={{ width: '100%', height: '200px', overflow: 'hidden' }}>
-                                            <div style={{ width: '100%', height: '200px', overflow: 'hidden' }}>
-                                                <Mapafijo
-                                                    latitud={sucursalData.id_ubicacion.latitud}
-                                                    longitud={sucursalData.id_ubicacion.longitud}
-                                                    idm={sucursalData.id_sucursal}
-                                                />
+                                        <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
+                                            <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
+                                                <>
+                                                    <Mapafijo
+                                                        latitud={sucursalData.id_ubicacion.latitud}
+                                                        longitud={sucursalData.id_ubicacion.longitud}
+                                                        idm={sucursalData.id_sucursal}
+                                                    />
+                                                    <Row align="right">
+                                                        <Col md={12}>
+                                                            <Tooltip title='Editar o agregar ubicación'>
+                                                                <Button
+                                                                    type="primary"
+                                                                    icon={<EditFilled />}
+                                                                    onClick={showDraweru}
+                                                                >
+                                                                </Button>
+                                                            </Tooltip>
+                                                        </Col>
+                                                    </Row>
+                                                </>
                                             </div>
                                         </div>
                                     ) : (
-                                        <Watermark content={[sucursalData.snombre, 'Sin ubicación']}>
-                                            <div style={{ width: '100%', height: '200px', overflow: 'hidden', backgroundColor: '#ffff', borderLeft: '1px solid  #A4A4A4', borderRight: ' 1px solid  #A4A4A4' }} />
-                                        </Watermark>
+                                        <>
+                                            <Watermark content={[sucursalData.snombre, 'Sin ubicación']}>
+                                                <div style={{ width: '100%', height: '200px', overflow: 'hidden', backgroundColor: '#ffff', borderLeft: '1px solid  #A4A4A4', borderRight: ' 1px solid  #A4A4A4' }} />
+                                            </Watermark>
+                                            <Row align="right">
+                                                <Col md={12}>
+                                                    <Tooltip title='Editar o agregar ubicación'>
+                                                        <Button
+                                                            type="primary"
+                                                            icon={<EditFilled />}
+                                                            onClick={showDraweru}
+                                                        >
+                                                        </Button>
+                                                    </Tooltip>
+                                                </Col>
+                                            </Row>
+                                        </>
                                     )
+
                                 }
                             >
                                 <strong style={{ fontWeight: 'bold', fontSize: '10.5px' }}>Dirección:</strong> {sucursalData.sdireccion}
@@ -429,6 +474,60 @@ const AdminSucursal = ({ idsucursalx }) => {
                             </Card>
                         )}
                     </Col>
+                </Col>
+                <Drawer
+                    title="Editar ubicación de la sucursal"
+                    width={720}
+                    onClose={onCloseu}
+                    open={openu}
+                    styles={{
+                        body: {
+                            paddingBottom: 80,
+                        },
+                    }}
+                >
+                    <Table
+                        columns={[
+                            { title: 'Ubicacion', dataIndex: 'Ubicacion', key: 'Ubicacion' },
+                        ]}
+                        dataSource={[
+                            {
+                                title: 'Ubicacion',
+                                dataIndex: 'Ubicacion',
+                                key: 'Ubicacion',
+                                Ubicacion: sucursalData ? (
+                                    <MapaActual
+                                        latitud={sucursalData.id_ubicacion.latitud}
+                                        longitud={sucursalData.id_ubicacion.longitud}
+                                        onSaveCoordinates={handleSaveUbicacion}
+                                    />
+                                ) : (
+                                    <div>
+                                        <MapaActual
+                                            onSaveCoordinates={handleSaveUbicacion}
+                                        />
+                                        <p>No hay ubicación agregada. Selecciona tu ubicación.</p>
+                                    </div>
+                                ),
+                            },
+                        ]}
+                        pagination={false}
+                        size="middle"
+                        bordered
+                    />
+                </Drawer>
+                <Col md={8}>
+                    <div style={{ flex: 1, marginRight: '20px', padding: '2px' }}>
+                        <Form form={form} name="adminSucursalForm" onFinish={onFinish} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+                            <Table columns={columns} dataSource={renderFormItems()} pagination={false} size="middle" bordered />
+
+                            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                                <Button type="primary" htmlType="submit" onClick={handleGuardarClick}>
+                                    Guardar
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </div>
                 </Col>
             </Row>
             <Row>
@@ -522,60 +621,6 @@ const AdminSucursal = ({ idsucursalx }) => {
 
                 </Col>
             </Row>
-            <div style={{ display: 'flex', padding: '2px' }}>
-                <div style={{ flex: 1, marginRight: '20px', padding: '2px' }}>
-                    <Form form={form} name="adminSucursalForm" onFinish={onFinish} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
-                        <Table columns={columns} dataSource={renderFormItems()} pagination={false} size="middle" bordered />
-
-                        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                            <Button type="primary" htmlType="submit" onClick={handleGuardarClick}>
-                                Guardar
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </div>
-                <div style={{ flex: 1, marginRight: '20px', padding: '2px' }}>
-                    <div style={{ flex: 1, marginRight: '20px', padding: '2px' }}>
-
-                    </div>
-                    <div style={{ flex: 1, marginRight: '20px', padding: '2px' }}>
-
-                    </div>
-                    <div >
-                        <Table
-                            columns={[
-                                { title: 'Ubicacion', dataIndex: 'Ubicacion', key: 'Ubicacion' },
-                            ]}
-                            dataSource={[
-                                {
-                                    title: 'Ubicacion',
-                                    dataIndex: 'Ubicacion',
-                                    key: 'Ubicacion',
-                                    Ubicacion: sucursalData ? (
-                                        <MapaActual
-                                            latitud={sucursalData.id_ubicacion.latitud}
-                                            longitud={sucursalData.id_ubicacion.longitud}
-                                            onSaveCoordinates={handleSaveUbicacion}
-                                        />
-                                    ) : (
-                                        <div>
-                                            <MapaActual
-                                                onSaveCoordinates={handleSaveUbicacion}
-                                            />
-                                            <p>No hay ubicación agregada. Selecciona tu ubicación.</p>
-                                        </div>
-                                    ),
-                                },
-                            ]}
-                            pagination={false}
-                            size="middle"
-                            bordered
-                        />
-                    </div>
-
-                </div>
-
-            </div>
             <div>
                 <Table
                     columns={[
@@ -600,40 +645,7 @@ const AdminSucursal = ({ idsucursalx }) => {
                     bordered
                 />
             </div>
-            <div>
-                <h1>Horarios</h1>
-                <Table
-                    columns={[
-                        { title: 'Día', dataIndex: 'dia', key: 'dia' },
-                        { title: 'Hora Inicio', dataIndex: 'hora_inicio', key: 'hora_inicio' },
-                        { title: 'Hora Fin', dataIndex: 'hora_fin', key: 'hora_fin' },
-                    ]}
-                    dataSource={horarioDetails}
-                    pagination={false}
-                    size="middle"
-                    bordered
-                />
-                <Button onClick={handleHorarioClick}>{valorb}</Button>
-                {mostrarComponenteB && <div>
-                    <Form form={form} layout="vertical">
-                        <Form.Item
-                            label="Nombre del horario"
-                            name="nombreh"
-                            rules={[{ required: true, message: 'Agrega un nombre al horario' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            label="Descripcion del horario"
-                            name="hordescripcion"
-                        >
-                            <TextArea />
-                        </Form.Item>
-                    </Form>
-                    <CrearHorariosSemanales onHorarioCreate={handleHorarioCreate} />
-                </div>}
-
-            </div>
+            
         </>
     );
 };
