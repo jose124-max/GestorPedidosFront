@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, Table, Select, Switch, message, Modal, Upload, Card, Tooltip, Watermark, Badge, Tag } from 'antd';
 import { Row, Col } from 'react-bootstrap';
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined,EditFilled } from '@ant-design/icons';
 import MapaActual from './mapaactual';
 import EditarEmpleado from './EditarEmpleado';
 import CrearHorariosSemanales from './crearhorarioS';
@@ -340,105 +340,137 @@ const AdminSucursal = ({ idsucursalx }) => {
 
             <h4>{sucursalData && (sucursalData.snombre)}</h4>
             <Row>
-                <Col xs={24} sm={12} md={3} lg={3}>
-                    {sucursalData && (
-                        <Card
-                            hoverable
-                            title={sucursalData.snombre}
-                            style={{
-                                width: '100%', backgroundColor: '#CAF0EF', border: '1px solid #A4A4A4', marginTop: '5%',
-                                height: '92%',
-                                margin: '16px',
-                                marginLeft: '1px',
-                            }}
-                            cover={
-                                sucursalData.id_ubicacion.longitud ? (
-                                    <div style={{ width: '100%', height: '200px', overflow: 'hidden' }}>
+                <Col md={3}>
+                    <Col xs={24} sm={12} md={12} lg={12}>
+                        {sucursalData && (
+                            <Card
+                                hoverable
+                                title={sucursalData.snombre}
+                                style={{
+                                    width: '100%', backgroundColor: '#CAF0EF', border: '1px solid #A4A4A4', marginTop: '5%',
+                                    height: '92%',
+                                    margin: '16px',
+                                    marginLeft: '1px',
+                                }}
+                                cover={
+                                    sucursalData.id_ubicacion.longitud ? (
                                         <div style={{ width: '100%', height: '200px', overflow: 'hidden' }}>
-                                            <Mapafijo
-                                                latitud={sucursalData.id_ubicacion.latitud}
-                                                longitud={sucursalData.id_ubicacion.longitud}
-                                                idm={sucursalData.id_sucursal}
-                                            />
+                                            <div style={{ width: '100%', height: '200px', overflow: 'hidden' }}>
+                                                <Mapafijo
+                                                    latitud={sucursalData.id_ubicacion.latitud}
+                                                    longitud={sucursalData.id_ubicacion.longitud}
+                                                    idm={sucursalData.id_sucursal}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-                                ) : (
-                                    <Watermark content={[sucursalData.snombre, 'Sin ubicación']}>
-                                        <div style={{ width: '100%', height: '200px', overflow: 'hidden', backgroundColor: '#ffff', borderLeft: '1px solid  #A4A4A4', borderRight: ' 1px solid  #A4A4A4' }} />
-                                    </Watermark>
-                                )
-                            }
-                        >
-                            <strong style={{ fontWeight: 'bold', fontSize: '10.5px' }}>Dirección:</strong> {sucursalData.sdireccion}
-                            <Row align="right">
-                                <strong style={{ fontWeight: 'bold', fontSize: '10.5px' }}>Estado:</strong>
-                                <Col md={12}>
-                                    <Tooltip title={sucursalData.sestado === '1' ? 'Desactivar Sucursal' : 'Activar Sucursal'}>
-                                        <Switch
-                                            defaultChecked={sucursalData.sestado === '1'}
-                                            checked={sucursalData.sestado === '1'}
-                                            onChange={(checked) => handleSwitchChange(checked, sucursalData.id_sucursal)}
-                                        />
-                                    </Tooltip>
-                                </Col>
-                            </Row>
-                            <Row align="left">
-                                <br />
-                                <Col md={12}>
-                                    <strong style={{ fontWeight: 'bold', fontSize: '10.5px' }}>Empleados: </strong>
-                                    <Badge count={sucursalData.cantidadempleados} showZero color='#06CE15' />
-                                </Col>
-                            </Row>
+                                    ) : (
+                                        <Watermark content={[sucursalData.snombre, 'Sin ubicación']}>
+                                            <div style={{ width: '100%', height: '200px', overflow: 'hidden', backgroundColor: '#ffff', borderLeft: '1px solid  #A4A4A4', borderRight: ' 1px solid  #A4A4A4' }} />
+                                        </Watermark>
+                                    )
+                                }
+                            >
+                                <strong style={{ fontWeight: 'bold', fontSize: '10.5px' }}>Dirección:</strong> {sucursalData.sdireccion}
+                                <Row align="right">
+                                    <strong style={{ fontWeight: 'bold', fontSize: '10.5px' }}>Estado:</strong>
+                                    <Col md={12}>
+                                        <Tooltip title={sucursalData.sestado === '1' ? 'Desactivar Sucursal' : 'Activar Sucursal'}>
+                                            <Switch
+                                                defaultChecked={sucursalData.sestado === '1'}
+                                                checked={sucursalData.sestado === '1'}
+                                                onChange={(checked) => handleSwitchChange(checked, sucursalData.id_sucursal)}
+                                            />
+                                        </Tooltip>
+                                    </Col>
+                                </Row>
+                                <Row align="left">
+                                    <br />
+                                    <Col md={12}>
+                                        <strong style={{ fontWeight: 'bold', fontSize: '10.5px' }}>Empleados: </strong>
+                                        <Badge count={sucursalData.cantidadempleados} showZero color='#06CE15' />
+                                    </Col>
+                                </Row>
 
-                        </Card>
-                    )}
+                            </Card>
+                        )}
+                    </Col>
                 </Col>
                 <Col md={9}>
-                    <div className="table-responsive">
-                    <table className="table table-bordered" style={{ border: '1px solid #A4A4A4', marginTop: '5%' }}>
-                        <thead>
-                            <tr>
-                                <th scope="col">Domingo</th>
-                                <th scope="col">Lunes</th>
-                                <th scope="col">Martes</th>
-                                <th scope="col">Miércoles</th>
-                                <th scope="col">Jueves</th>
-                                <th scope="col">Viernes</th>
-                                <th scope="col">Sábado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                {["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"].map((dia, index) => (
-                                    <td key={index} className="text-left">
-                                        {horarioDetails.map((detalle) => {
-                                            if (detalle.dia === dia) {
-                                                return (
-                                                    <div key={detalle.dia}>
-                                                        <Tag color={detalle.hora_inicio ? '#52c41a' : '#f5222d'}>
-                                                            {detalle.hora_inicio ? 'Abrir' : 'Cerrar'}
-                                                        </Tag>
-                                                        <label>{detalle.hora_inicio || "00:00"}</label>
-                                                        <Tag color={detalle.hora_fin ? '#f5222d' : '#52c41a'}>
-                                                            {detalle.hora_fin ? 'Cerrar' : 'Abrir'}
-                                                        </Tag>
-                                                        <label>{detalle.hora_fin || "00:00"}</label>
-                                                    </div>
-                                                );
-                                            }
-                                            return null;
-                                        })}
-                                    </td>
-                                ))}
-                            </tr>
-                        </tbody>
-                    </table>
-                    </div>
+                    <Card
+                        hoverable
+                        title={'Horario de atención'}
+                        style={{
+                            width: '100%', border: '1px solid #A4A4A4', marginTop: '5%',
+                            margin: '16px',
+                            marginLeft: '1px',
+                        }}
+                        cover={
+                            <div >
+                                {horarioDetails.length > 0 && (
+                                    <div className="table-responsive">
+                                        <table className="table table-bordered" style={{ border: '1px solid #A4A4A4', marginTop: '5%' }}>
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Domingo</th>
+                                                    <th scope="col">Lunes</th>
+                                                    <th scope="col">Martes</th>
+                                                    <th scope="col">Miércoles</th>
+                                                    <th scope="col">Jueves</th>
+                                                    <th scope="col">Viernes</th>
+                                                    <th scope="col">Sábado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    {["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"].map((dia, index) => (
+                                                        <td key={index} className="text-left">
+                                                            {horarioDetails.map((detalle) => {
+                                                                if (detalle.dia === dia) {
+                                                                    return (
+                                                                        <>
+                                                                            <Tag color={detalle.hora_inicio ? '#52c41a' : '#f5222d'}>
+                                                                                {detalle.hora_inicio ? 'Abrir' : 'Cerrar'}
+                                                                            </Tag>
+                                                                            <br />
+                                                                            <label>{detalle.hora_inicio || "00:00"}</label>
+                                                                            <Tag color={detalle.hora_fin ? '#f5222d' : '#52c41a'}>
+                                                                                {detalle.hora_fin ? 'Cerrar' : 'Abrir'}
+                                                                            </Tag>
+                                                                            <br />
+                                                                            <label>{detalle.hora_fin || "00:00"}</label>
+                                                                        </>
+
+                                                                    );
+                                                                }
+                                                                return null;
+                                                            })}
+                                                        </td>
+                                                    ))}
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>)}
+                            </div>
+                        }
+                    >
+                        <Row align="right">
+                            <Col md={12}>
+                        <Button
+                            type="primary"
+                            icon={<EditFilled />}
+                            onClick={() => {
+                                console.log('Botón de edición clickeado');
+                            }}
+                        >
+                        </Button></Col>
+                        </Row>
+                        
+                    </Card>
+
                 </Col>
             </Row>
             <div style={{ display: 'flex', padding: '2px' }}>
                 <div style={{ flex: 1, marginRight: '20px', padding: '2px' }}>
-
                     <Form form={form} name="adminSucursalForm" onFinish={onFinish} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
                         <Table columns={columns} dataSource={renderFormItems()} pagination={false} size="middle" bordered />
 
