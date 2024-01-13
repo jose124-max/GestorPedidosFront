@@ -7,7 +7,6 @@ import EditarEmpleado from './EditarEmpleado';
 import CrearHorariosSemanales from './crearhorarioS';
 import TextArea from 'antd/es/input/TextArea';
 import Mapafijo from './mapafijo';
-import EditarHorariosSemanales from './editarhorarioS';
 
 const { Option } = Select;
 
@@ -22,14 +21,15 @@ const AdminSucursal = ({ idsucursalx }) => {
     const [mostrarComponenteB, setMostrarComponenteB] = useState(false);
     const [horarioDetails, setHorarioDetails] = useState([]);
     const [horario, sethorario] = useState('mostrar');
+    const [idhorario, sethorarioid] = useState(null);
 
-    const editarSucursal=()=>{
-        if(horario=='mostrar'){
+    const editarSucursal = () => {
+        if (horario == 'mostrar') {
             sethorario('editar')
-        }else{
+        } else {
             sethorario('mostrar')
         }
-        
+
     }
 
     const handleHorarioClick = () => {
@@ -39,6 +39,34 @@ const AdminSucursal = ({ idsucursalx }) => {
         } else { setMostrarComponenteB(true); setvalor('Cancelar'); }
 
     };
+
+    const editHorarioCreate = async (jsonHorario) => {
+        try {
+            const formDataObject = new FormData();
+            formDataObject.append('detalle', JSON.stringify(jsonHorario));
+
+            const response = await fetch('http://127.0.0.1:8000/horarios/edit/'+idhorario, {
+                method: 'POST',
+                body: formDataObject,
+            });
+
+            const responseData = await response.json();
+
+            if (responseData.mensaje) {
+                message.success(responseData.mensaje);
+                fetchData();
+                handleHorarioClick();
+                sethorario('mostrar')
+
+            } else {
+                message.error('Error al editar el horario'+
+                responseData.error);
+            }
+        } catch (error) {
+            message.error('Error al validar el formulario');
+        }
+    };
+
     const handleHorarioCreate = async (jsonHorario) => {
         try {
             const formData = await form.validateFields();
@@ -47,7 +75,7 @@ const AdminSucursal = ({ idsucursalx }) => {
             const formDataObject = new FormData();
             console.log(JSON.stringify(jsonHorario));
             console.log(nombreh);
-            formDataObject.append('nombreh', 'horarioSucursal'+idsucursalx);
+            formDataObject.append('nombreh', 'horarioSucursal' + idsucursalx);
             formDataObject.append('detalle', JSON.stringify(jsonHorario));
             formDataObject.append('idsucursal', idsucursalx);
 
@@ -83,7 +111,7 @@ const AdminSucursal = ({ idsucursalx }) => {
             const data = await response.json();
 
             if (data.detalles) {
-                console.log('Detalles'+data.detalles[0].dia);
+                console.log('Detalles' + data.detalles[0].dia);
                 setHorarioDetails(data.detalles);
             } else {
                 console.error('No se encontraron detalles del horario');
@@ -114,6 +142,8 @@ const AdminSucursal = ({ idsucursalx }) => {
                 setLoading(false);
             }
             fetchHorarioDetails(data.mensaje[0].id_horarios);
+            sethorarioid(data.mensaje[0].id_horarios);
+            
             setFileList([
                 {
                     uid: '-1',
@@ -405,7 +435,7 @@ const AdminSucursal = ({ idsucursalx }) => {
                 </Col>
             </Row>
             <Row>
-            <Col md={12}>
+                <Col md={12}>
                     <Card
                         hoverable
                         title={'Horario de atención'}
@@ -475,7 +505,7 @@ const AdminSucursal = ({ idsucursalx }) => {
                                 {horarioDetails.length > 0 && horario === 'editar' && (
                                     <>
 
-                                        <EditarHorariosSemanales detalles={horarioDetails}/>
+                                        <CrearHorariosSemanales detalles={horarioDetails} onHorarioCreate={editHorarioCreate} />
                                     </>
                                 )}
                             </div>
