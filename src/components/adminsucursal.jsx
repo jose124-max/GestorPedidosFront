@@ -113,12 +113,9 @@ const AdminSucursal = ({ idsucursalx }) => {
             if (data.detalles) {
                 console.log('Detalles' + data.detalles[0].dia);
                 setHorarioDetails(data.detalles);
-            } else {
-                console.error('No se encontraron detalles del horario');
-            }
+            } 
         } catch (error) {
-            console.error('Error al obtener los detalles del horario:', error);
-            message.error('Error al obtener los detalles del horario');
+            message.warning('No haz creado un horario de atención para tu sucursal');
         }
     };
 
@@ -462,7 +459,7 @@ const AdminSucursal = ({ idsucursalx }) => {
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    {["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"].map((dia, index) => (
+                                                    {["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"].map((dia, index) => (
                                                         <td key={index} className="text-left">
                                                             {horarioDetails.map((detalle) => {
                                                                 if (detalle.dia === dia) {
