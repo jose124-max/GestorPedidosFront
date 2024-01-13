@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, Table, Select, Switch, message, Modal, Upload, Card, Tooltip, Watermark, Badge, Tag } from 'antd';
 import { Row, Col } from 'react-bootstrap';
-import { UploadOutlined,EditFilled } from '@ant-design/icons';
+import { UploadOutlined, EditFilled } from '@ant-design/icons';
 import MapaActual from './mapaactual';
 import EditarEmpleado from './EditarEmpleado';
 import CrearHorariosSemanales from './crearhorarioS';
 import TextArea from 'antd/es/input/TextArea';
-import Mapafijo from './mapafijo'
+import Mapafijo from './mapafijo';
+import EditarHorariosSemanales from './editarhorarioS';
 
 const { Option } = Select;
 
@@ -20,7 +21,16 @@ const AdminSucursal = ({ idsucursalx }) => {
     const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
     const [mostrarComponenteB, setMostrarComponenteB] = useState(false);
     const [horarioDetails, setHorarioDetails] = useState([]);
+    const [horario, sethorario] = useState('mostrar');
 
+    const editarSucursal=()=>{
+        if(horario=='mostrar'){
+            sethorario('editar')
+        }else{
+            sethorario('mostrar')
+        }
+        
+    }
 
     const handleHorarioClick = () => {
         if (mostrarComponenteB) {
@@ -37,9 +47,7 @@ const AdminSucursal = ({ idsucursalx }) => {
             const formDataObject = new FormData();
             console.log(JSON.stringify(jsonHorario));
             console.log(nombreh);
-            formDataObject.append('nombreh', nombreh);
-            formDataObject.append('hordescripcion', hordescripcion);
-
+            formDataObject.append('nombreh', 'horarioSucursal'+idsucursalx);
             formDataObject.append('detalle', JSON.stringify(jsonHorario));
             formDataObject.append('idsucursal', idsucursalx);
 
@@ -75,7 +83,7 @@ const AdminSucursal = ({ idsucursalx }) => {
             const data = await response.json();
 
             if (data.detalles) {
-                console.log(data.detalles);
+                console.log('Detalles'+data.detalles[0].dia);
                 setHorarioDetails(data.detalles);
             } else {
                 console.error('No se encontraron detalles del horario');
@@ -395,7 +403,9 @@ const AdminSucursal = ({ idsucursalx }) => {
                         )}
                     </Col>
                 </Col>
-                <Col md={9}>
+            </Row>
+            <Row>
+            <Col md={12}>
                     <Card
                         hoverable
                         title={'Horario de atención'}
@@ -406,7 +416,7 @@ const AdminSucursal = ({ idsucursalx }) => {
                         }}
                         cover={
                             <div >
-                                {horarioDetails.length > 0 && (
+                                {horarioDetails.length > 0 && horario === 'mostrar' && (
                                     <div className="table-responsive">
                                         <table className="table table-bordered" style={{ border: '1px solid #A4A4A4', marginTop: '5%' }}>
                                             <thead>
@@ -432,12 +442,18 @@ const AdminSucursal = ({ idsucursalx }) => {
                                                                                 {detalle.hora_inicio ? 'Abrir' : 'Cerrar'}
                                                                             </Tag>
                                                                             <br />
-                                                                            <label>{detalle.hora_inicio || "00:00"}</label>
+                                                                            <Tooltip title='Hora de apertura'>
+                                                                                <label>{detalle.hora_inicio || "00:00"}</label>
+                                                                            </Tooltip>
+                                                                            <br />
                                                                             <Tag color={detalle.hora_fin ? '#f5222d' : '#52c41a'}>
                                                                                 {detalle.hora_fin ? 'Cerrar' : 'Abrir'}
                                                                             </Tag>
                                                                             <br />
-                                                                            <label>{detalle.hora_fin || "00:00"}</label>
+                                                                            <Tooltip title='Hora de cierre'>
+                                                                                <label>{detalle.hora_fin || "00:00"}</label>
+                                                                            </Tooltip>
+                                                                            <br />
                                                                         </>
 
                                                                     );
@@ -450,21 +466,31 @@ const AdminSucursal = ({ idsucursalx }) => {
                                             </tbody>
                                         </table>
                                     </div>)}
+                                {horarioDetails.length == 0 && (
+                                    <>
+
+                                        <CrearHorariosSemanales onHorarioCreate={handleHorarioCreate} />
+                                    </>
+                                )}
+                                {horarioDetails.length > 0 && horario === 'editar' && (
+                                    <>
+
+                                        <EditarHorariosSemanales detalles={horarioDetails}/>
+                                    </>
+                                )}
                             </div>
                         }
                     >
                         <Row align="right">
                             <Col md={12}>
-                        <Button
-                            type="primary"
-                            icon={<EditFilled />}
-                            onClick={() => {
-                                console.log('Botón de edición clickeado');
-                            }}
-                        >
-                        </Button></Col>
+                                <Button
+                                    type="primary"
+                                    icon={<EditFilled />}
+                                    onClick={(editarSucursal)}
+                                >
+                                </Button></Col>
                         </Row>
-                        
+
                     </Card>
 
                 </Col>

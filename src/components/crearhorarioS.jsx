@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Table, TimePicker, Tag, message, Button } from 'antd';
+import { Row, Col } from 'react-bootstrap';
 
 const CrearHorariosSemanales = ({ onHorarioCreate }) => {
     const [lunesData, setLunesData] = useState([{ time: null }]);
@@ -76,112 +77,95 @@ const CrearHorariosSemanales = ({ onHorarioCreate }) => {
     };
 
     const renderDayTable = (dayName, dayData, setDayData) => {
-        const columns = [
-            {
-                dataIndex: dayName,
-                key: dayName,
-                render: (_, record, index) => (
-                    <div style={{ verticalAlign: 'top' }}>
-                        {record.time ? (
-                            <>
-                                <Tag color={record.tag === 'Abrir' ? '#52c41a' : '#f5222d'}>{record.tag}</Tag>
-                                <TimePicker format="HH:mm" value={record.time} onChange={(value) => handleTimeChange(index, value, setDayData)} />
-                            </>
-                        ) : (
-                            <>
-                                <Tag color="#858585">Sin especificar</Tag>
-                                <TimePicker format="HH:mm" onChange={(value) => handleTimeChange(index, value, setDayData)} />
-                            </>
-                        )}
-                    </div>
-                ),
-            },
-        ];
-
         return (
             <>
-                <Table columns={columns} dataSource={dayData} pagination={false} size="middle" bordered showHeader={false} />
+                <table className="table " headers="false"  >
+                    <thead>
+                        <tr>
+                            <th>{dayName}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                {dayData.map((record, index) => (
+                                    <div key={index} style={{ marginBottom: '10px' }}>
+                                        {record.time ? (
+                                            <>
+                                                <Tag color={record.tag === 'Abrir' ? '#52c41a' : '#f5222d'}>{record.tag}</Tag>
+                                                <TimePicker
+                                                    format="HH:mm"
+                                                    value={record.time}
+                                                    onChange={(value) => handleTimeChange(index, value, setDayData)}
+                                                />
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Tag color="#858585">Sin especificar</Tag>
+                                                <TimePicker
+                                                    format="HH:mm"
+                                                    onChange={(value) => handleTimeChange(index, value, setDayData)}
+                                                />
+                                            </>
+                                        )}
+                                    </div>
+                                ))}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </>
         );
     };
 
     return (
         <>
-            <h1>Crear Horario</h1>
-            <Table style={{ verticalAlign: 'top' }}
-                columns={[
-                    { title: 'Horario', dataIndex: 'Horario', key: 'Horario' },
-                ]}
-                dataSource={[{
-                    dataIndex: 'Horario',
-                    key: 'Horario',
-                    Horario:
-                        <>
-                            <Table style={{ verticalAlign: 'top' }}
-                                columns={[
-                                    { title: 'Domingo', dataIndex: 'Domingo', key: 'Domingo' },
-                                    { title: 'Lunes', dataIndex: 'Lunes', key: 'Lunes' },
-                                    { title: 'Martes', dataIndex: 'Martes', key: 'Martes' },
-                                    { title: 'Miercoles', dataIndex: 'Miercoles', key: 'Miercoles' },
-                                    { title: 'Jueves', dataIndex: 'Jueves', key: 'Jueves' },
-                                    { title: 'Viernes', dataIndex: 'Viernes', key: 'Viernes' },
-                                    { title: 'Sabado', dataIndex: 'Sabado', key: 'Sabado' },
-                                ]}
-                                dataSource={[
-                                    {
-                                        dataIndex: 'Horarios',
-                                        key: 'Horarios',
-                                        Domingo:
-                                            <>
-                                                {renderDayTable('Domingo', lunesData, setDomingoData)}
-                                            </>,
-                                        Lunes:
-                                            <>
-                                                {renderDayTable('Lunes', lunesData, setLunesData)}
-                                            </>,
-                                        Martes:
-                                            <>
-                                                {renderDayTable('Martes', martesData, setMartesData)}
-                                            </>,
-                                        Miercoles:
-                                            <>
-                                                {renderDayTable('Miércoles', miercolesData, setMiercolesData)}
-                                            </>,
-                                        Jueves:
-                                            <>
-                                                {renderDayTable('Jueves', juevesData, setJuevesData)}
-
-                                            </>,
-                                        Viernes:
-                                            <>
-                                                {renderDayTable('Viernes', viernesData, setViernesData)}
-
-                                            </>,
-                                        Sabado:
-                                            <>
-                                                {renderDayTable('Sábado', sabadoData, setSabadoData)}
-                                            </>,
-                                        Domingo:
-                                            <>
+            <div className="table-responsive">
+                <table className="table table-bordered" headers="false" style={{ border: '1px solid #A4A4A4' }}>
+  
+                    <tbody>
+                        <tr>
+                            <td>
+                                <table className="table" headers="false" style={{ border: '1px solid #A4A4A4' }}>
+                                    <tbody>
+                                        <tr>
+                                            <td>
                                                 {renderDayTable('Domingo', domingoData, setDomingoData)}
-                                            </>,
-                                    },
-                                ]}
-                                pagination={false}
-
-                            />
-                        </>
-                }
-                ]}
-                pagination={false}
-                size="middle"
-                bordered></Table >
-             <br/>
+                                            </td>
+                                            <td>
+                                                {renderDayTable('Lunes', lunesData, setLunesData)}
+                                            </td>
+                                            <td>
+                                                {renderDayTable('Martes', martesData, setMartesData)}
+                                            </td>
+                                            <td>
+                                                {renderDayTable('Miércoles', miercolesData, setMiercolesData)}
+                                            </td>
+                                            <td>
+                                                {renderDayTable('Jueves', juevesData, setJuevesData)}
+                                            </td>
+                                            <td>
+                                                {renderDayTable('Viernes', viernesData, setViernesData)}
+                                            </td>
+                                            <td>
+                                                {renderDayTable('Sábado', sabadoData, setSabadoData)}
+                                            </td>
+                                            <td>
+                                                {renderDayTable('Domingo', domingoData, setDomingoData)}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br />
             <Button type="primary" onClick={handleCreateHorario}>
                 Crear horario
             </Button>
         </>
     );
 };
-
 export default CrearHorariosSemanales;
