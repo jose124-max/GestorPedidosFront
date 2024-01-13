@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Table, Select, Switch, message, Modal, Upload, Card, Tooltip, Watermark, Badge } from 'antd';
+import { Form, Input, Button, Table, Select, Switch, message, Modal, Upload, Card, Tooltip, Watermark, Badge, Tag } from 'antd';
 import { Row, Col } from 'react-bootstrap';
 import { UploadOutlined } from '@ant-design/icons';
 import MapaActual from './mapaactual';
@@ -184,30 +184,30 @@ const AdminSucursal = ({ idsucursalx }) => {
             content: '¿Estás seguro de que deseas actualizar la ubicación de esta sucursal?',
             onOk() {
                 const formData = new FormData();
-    
+
                 console.log('id_sucursal', idsucursalx);
                 formData.append('id_sucursal', idsucursalx);
                 formData.append('latitud', latitud);
                 console.log('latitud' + latitud);
                 formData.append('longitud', longitud);
-    
+
                 fetch('http://127.0.0.1:8000/sucursal/editarubicacion/', {
                     method: 'POST',
                     body: formData,
                 })
-                .then(response => {
-                    if (response.ok) {
-                        message.success('Ubicacion actualizada correctamente');
-                        onClosee(false);
-                        fetchData();
-                    } else {
-                        throw new Error('Error al editar la ubicacion de la sucursal');
-                    }
-                })
-                .catch(error => {
-                    message.error(error.message);
-                    console.error('Error al editar la ubicacion de la sucursal', error);
-                });
+                    .then(response => {
+                        if (response.ok) {
+                            message.success('Ubicacion actualizada correctamente');
+                            onClosee(false);
+                            fetchData();
+                        } else {
+                            throw new Error('Error al editar la ubicacion de la sucursal');
+                        }
+                    })
+                    .catch(error => {
+                        message.error(error.message);
+                        console.error('Error al editar la ubicacion de la sucursal', error);
+                    });
             },
             onCancel() {
                 message.success('Actualización de ubicación cancelada');
@@ -392,6 +392,48 @@ const AdminSucursal = ({ idsucursalx }) => {
 
                         </Card>
                     )}
+                </Col>
+                <Col md={9}>
+                    <div className="table-responsive">
+                    <table className="table table-bordered" style={{ border: '1px solid #A4A4A4', marginTop: '5%' }}>
+                        <thead>
+                            <tr>
+                                <th scope="col">Domingo</th>
+                                <th scope="col">Lunes</th>
+                                <th scope="col">Martes</th>
+                                <th scope="col">Miércoles</th>
+                                <th scope="col">Jueves</th>
+                                <th scope="col">Viernes</th>
+                                <th scope="col">Sábado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                {["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"].map((dia, index) => (
+                                    <td key={index} className="text-left">
+                                        {horarioDetails.map((detalle) => {
+                                            if (detalle.dia === dia) {
+                                                return (
+                                                    <div key={detalle.dia}>
+                                                        <Tag color={detalle.hora_inicio ? '#52c41a' : '#f5222d'}>
+                                                            {detalle.hora_inicio ? 'Abrir' : 'Cerrar'}
+                                                        </Tag>
+                                                        <label>{detalle.hora_inicio || "00:00"}</label>
+                                                        <Tag color={detalle.hora_fin ? '#f5222d' : '#52c41a'}>
+                                                            {detalle.hora_fin ? 'Cerrar' : 'Abrir'}
+                                                        </Tag>
+                                                        <label>{detalle.hora_fin || "00:00"}</label>
+                                                    </div>
+                                                );
+                                            }
+                                            return null;
+                                        })}
+                                    </td>
+                                ))}
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
                 </Col>
             </Row>
             <div style={{ display: 'flex', padding: '2px' }}>
