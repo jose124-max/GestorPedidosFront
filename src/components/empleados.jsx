@@ -1,18 +1,33 @@
 import React,{useState} from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import { Divider, Avatar, Flex, Segmented, Tooltip } from 'antd';
+import { Divider, Avatar, Flex, Segmented, Tooltip,Drawer } from 'antd';
 import { Container, Row, Col } from 'react-bootstrap';
 import repartidor from './res/repartidor.png'
 import administrador from './res/administrador.png'
 import camarero from './res/camarero.png';
 import cocinero from './res/cocinero.png';
-import EditarEmpleado from './EditarEmpleado';
 import anadir from './res/anadir.png'
+import EditarEmpleado from './EditarEmpleado';
+import CrearEmpleadoForm from './crearempleado';
 
 const Empleados = ({ }) => {
     const [selectedOficio, setSelectedOficio] = useState('Administradores');
+    const [opene, setOpene] = useState(false);
+
+    const showDrawere = () => {
+        setOpene(true);
+    };
+
+    const onClosee = () => {
+        setSelectedOficio('Administradores');
+        setOpene(false);
+    };
 
     const handleOficioChange = (value) => {
+        if(value=='agregar'){
+            showDrawere();
+            return;
+        }
         setSelectedOficio(value);
     };
 
@@ -75,14 +90,28 @@ const Empleados = ({ }) => {
                                 value: 'agregar',
                             },
                         ]}
+                        value={selectedOficio}
                         onChange={handleOficioChange}
                     />
                 </Col>
                 <Col md={12}>
                     {console.log('Estp es : '+selectedOficio)}
-                    <EditarEmpleado oficio={selectedOficio}/>
+                    <EditarEmpleado oficio={selectedOficio} />
                 </Col>
             </Row>
+            <Drawer
+                title="Crear empleado"
+                width={720}
+                onClose={onClosee}
+                open={opene}
+                styles={{
+                    body: {
+                        paddingBottom: 80,
+                    },
+                }}
+            >
+                <CrearEmpleadoForm></CrearEmpleadoForm>
+            </Drawer>
         </>
     );
 };

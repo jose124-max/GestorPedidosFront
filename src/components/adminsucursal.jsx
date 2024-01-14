@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Table, Select, Switch, notification, Modal, Upload, Card, Tooltip, Watermark, Badge, Tag, Divider, Drawer } from 'antd';
+import { Form, Input, Button, Table, Select, Switch, notification, Modal, Upload, Card, Tooltip, Watermark, Badge, Tag, Divider, Drawer,Segmented,Avatar  } from 'antd';
 import { Row, Col } from 'react-bootstrap';
-import { UploadOutlined, EditFilled } from '@ant-design/icons';
+import { UploadOutlined, EditFilled,UserOutlined  } from '@ant-design/icons';
 import MapaActual from './mapaactual';
-import EditarEmpleado from './EditarEmpleado';
 import CrearHorariosSemanales from './crearhorarioS';
 import TextArea from 'antd/es/input/TextArea';
 import Mapafijo from './mapafijo';
+import repartidor from './res/repartidor.png'
+import administrador from './res/administrador.png'
+import camarero from './res/camarero.png';
+import cocinero from './res/cocinero.png';
+import anadir from './res/anadir.png'
+import EditarEmpleado from './EditarEmpleado';
+import CrearEmpleadoForm from './crearempleado';
 
 const { Option } = Select;
 
@@ -23,6 +29,25 @@ const AdminSucursal = ({ idsucursalx }) => {
     const [horario, sethorario] = useState('mostrar');
     const [idhorario, sethorarioid] = useState(null);
     const [openu, setOpenu] = useState(false);
+    const [selectedOficio, setSelectedOficio] = useState('Administradores');
+    const [opene, setOpene] = useState(false);
+
+    const showDrawere = () => {
+        setOpene(true);
+    };
+
+    const onClosee = () => {
+        setSelectedOficio('Administradores');
+        setOpene(false);
+    };
+
+    const handleOficioChange = (value) => {
+        if(value=='agregar'){
+            showDrawere();
+            return;
+        }
+        setSelectedOficio(value);
+    };
 
     const showDraweru = () => {
         setOpenu(true);
@@ -653,6 +678,80 @@ const AdminSucursal = ({ idsucursalx }) => {
                     </Card>
 
                 </Col>
+                <Col md={12}>
+                    <Card
+                        hoverable
+                        title={'Empleados'}
+                        style={{
+                            width: '100%', border: '1px solid #A4A4A4', marginTop: '5%',
+                            height: '100%',
+                            marginLeft: '1px',
+                        }}
+                    >
+                        <Col md={12}>
+                            <Segmented
+                                options={[
+                                    {
+                                        label: (
+                                            <Tooltip title="Administradores">
+                                                <div style={{ padding: 4 }}>
+                                                    <Avatar style={{ backgroundColor: '#87d068' }} src={administrador} size="large" />
+                                                </div>
+                                            </Tooltip>
+                                        ),
+                                        value: 'Administradores',
+                                    },
+                                    {
+                                        label: (
+                                            <Tooltip title="Motorizados">
+                                                <div style={{ padding: 4 }}>
+                                                    <Avatar style={{ backgroundColor: '#87d068' }} size="large" src={repartidor} />
+                                                </div>
+                                            </Tooltip>
+                                        ),
+                                        value: 'Motorizados',
+                                    },
+                                    {
+                                        label: (
+                                            <Tooltip title="Meseros">
+                                                <div style={{ padding: 4 }}>
+                                                    <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} size="large" src={camarero} />
+                                                </div>
+                                            </Tooltip>
+                                        ),
+                                        value: 'Meseros',
+                                    },
+                                    {
+                                        label: (
+                                            <Tooltip title="Jefes de cocina">
+                                                <div style={{ padding: 4 }}>
+                                                    <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} size="large" src={cocinero} />                                        </div>
+                                            </Tooltip>
+                                        ),
+                                        value: 'JefesCocina',
+                                    },
+                                    {
+                                        label: (
+                                            <Tooltip title="Agregar empleados">
+                                                <div style={{ padding: 4 }}>
+                                                    <Avatar style={{ backgroundColor: '#ffff' }} icon={<UserOutlined />} size="large" src={anadir} />                                        </div>
+                                            </Tooltip>
+                                        ),
+                                        value: 'agregar',
+                                    },
+                                ]}
+                                value={selectedOficio}
+                                onChange={handleOficioChange}
+                            />
+                        </Col>
+
+                        <EditarEmpleado idsucur={idsucursalx} ></EditarEmpleado>
+                    </Card>
+
+
+
+
+                </Col>
             </Row>
             <div>
                 <Table
@@ -678,6 +777,19 @@ const AdminSucursal = ({ idsucursalx }) => {
                     bordered
                 />
             </div>
+            <Drawer
+                title="Crear empleado"
+                width={720}
+                onClose={onClosee}
+                open={opene}
+                styles={{
+                    body: {
+                        paddingBottom: 80,
+                    },
+                }}
+            >
+                <CrearEmpleadoForm></CrearEmpleadoForm>
+            </Drawer>
 
         </>
     );
