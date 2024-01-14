@@ -90,6 +90,7 @@ const Empleados = ({ }) => {
                                 value: 'agregar',
                             },
                         ]}
+                        value={selectedOficio}
                         onChange={handleOficioChange}
                     />
                 </Col>
