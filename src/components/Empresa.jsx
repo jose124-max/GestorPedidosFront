@@ -186,7 +186,7 @@ const Empresa = () => {
               />
             </div>
           </Card>
-        </Col>
+        </Col> 
         <Divider>Sucursales</Divider>
         <Col md={12} style={{ padding: '2%' }}>
             <Sucursales />

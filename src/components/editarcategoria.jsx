@@ -16,7 +16,7 @@ const EditarCategoria = ({ onCancel }) => {
       console.error('Error fetching categorias:', error);
     }
   };
-
+ 
   useEffect(() => {
     const fetchTiposProductos = async () => {
       try {

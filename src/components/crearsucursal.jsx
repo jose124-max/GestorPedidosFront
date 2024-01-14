@@ -12,7 +12,7 @@ const Crearsucursal = () => {
     const onFinish = async (values) => {
         try {
             const formData = new FormData();
-
+ 
             formData.append('razonsocial', values.razonsocial);
             formData.append('sruc', values.ruc);
             formData.append('capacidad', values.capacidad);

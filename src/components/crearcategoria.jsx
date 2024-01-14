@@ -20,7 +20,7 @@ const CrearCategoria = () => {
   const showModal = () => {
     setModalVisible(true);
   };
-
+ 
   const handleOk = () => {
     // Puedes realizar acciones adicionales aquí si es necesario
     setModalVisible(false);

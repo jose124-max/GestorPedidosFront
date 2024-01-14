@@ -66,7 +66,7 @@ const Admin = () => {
         if (response.ok) {
           const data = await response.json();
           const rol = data.rol;
-
+ 
           // Puedes realizar acciones con el rol recibido si es necesario
 
           // Ejemplo de redirección basada en el rol

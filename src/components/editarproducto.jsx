@@ -11,7 +11,7 @@ import CrearProducto from './CrearProducto';
 import EditarTipoProducto from './editartipoproducto'
 
 const { Meta } = Card;
-const { Option } = Select;
+const { Option } = Select; 
 
 const EditarProducto = () => {
     const [productos, setProductos] = useState([]);

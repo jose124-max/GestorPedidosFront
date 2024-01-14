@@ -14,7 +14,7 @@ const HorariosSemanales = () => {
     // Aquí puedes definir más funciones o lógica necesaria
 
     return (
-        <>
+        <> 
             <h1>Horarios Semanales</h1>
             <div style={{ flex: 1, marginRight: '50px', padding: '2px' }}>
                 <Table

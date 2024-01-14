@@ -68,7 +68,7 @@ const EditarCombo = () => {
                 <li key={producto.id_producto}>{producto.nombreproducto}</li>
               ))}
             </ul>
-          </div>
+          </div> 
         ) : (
           <p>No hay productos asociados a este combo</p>
         )}

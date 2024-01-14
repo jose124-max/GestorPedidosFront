@@ -121,7 +121,7 @@ const EditarCliente = () => {
                 return tipoCliente;
         }
     };
-
+ 
     const handleCancel = () => {
         setEditingCliente(null);
         setVisible(false);

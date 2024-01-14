@@ -501,7 +501,7 @@ const NuevoComboForm = () => {
                                 return true; // Permitir la carga del archivo válido
                             }}
                             accept=".png, .jpg, .jpeg"
-                        >
+                        > 
                             {categoryFileList.length >= 1 ? null : uploadButton}
                         </Upload>
                     </Form.Item>

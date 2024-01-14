@@ -20,7 +20,7 @@ const CrearMesa = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Respuesta del servidor:', data);
+        console.log('Respuesta del servidor:', data); 
 
         // Mostrar mensaje de éxito
         message.success('Mesa creada con éxito');

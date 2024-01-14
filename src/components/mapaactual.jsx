@@ -110,7 +110,7 @@ const MapaActual = ({ latitud, longitud, onSaveCoordinates }) => {
               onChange={(e) => handleInputChange(e, 'lat')}
               style={{margin:'2%'}}
             />
-            <Input
+            <Input 
               placeholder="Longitud"
               value={inputLng}
               onChange={(e) => handleInputChange(e, 'lng')}

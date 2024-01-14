@@ -10,4 +10,4 @@ const Cliente = ({ nombre, apellido }) => {
 };
 
 export default Cliente;
-    
+     

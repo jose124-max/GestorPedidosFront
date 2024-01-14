@@ -199,7 +199,7 @@ const AdminMenu = () => {
                                 <br />
                                 Sucursales: <Badge count={sucursalesInfo.length} showZero color='#faad14' />
                                 .  Empleados: <Badge count={empresaInfo.empleados} showZero color='#06CE15' />
-
+ 
                             </Card>)}
                     </Col>
                     <Col md={9}>

@@ -88,7 +88,7 @@ const CrearHorariosSemanales = ({ onHorarioCreate, detalles }) => {
                         handleTimeChange(jueves + 1, null, setJuevesData);
                         jueves++;
                         break;
-                    case 'Viernes':
+                    case 'Viernes': 
                         handleTimeChange(viernes, dayjs(detalle.hora_fin, 'HH:mm:ss'), setViernesData);
                         handleTimeChange(viernes + 1, null, setViernesData);
                         viernes++;

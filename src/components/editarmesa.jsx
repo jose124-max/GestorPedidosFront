@@ -14,7 +14,7 @@ const EditarMesa = () => {
       .catch(error => console.error('Error al obtener las mesas:', error));
   }, []);
 
-  const showEditModal = (mesa) => {
+  const showEditModal = (mesa) => { 
     setEditingMesa(mesa);
     form.setFieldsValue({
       observacion: mesa.observacion,
