@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Image, Pagination, Select, Button, Form, Input, Modal, Checkbox, Upload, Badge } from 'antd';
+import { Form, Card, Input, Pagination, Button, Select, Modal, Upload, Tooltip, Badge, Segmented, Avatar, Checkbox, Drawer } from 'antd';
+import { Row, Col } from 'react-bootstrap';
+
 import { UploadOutlined } from '@ant-design/icons';
+import imgproductos from './res/imgproductos.png';
+import categoriaproducto from './res/categoriaproducto.png';
+import tipoproducto from './res/tipoproducto.png'
+import um from './res/um.png'
+import CrearProducto from './CrearProducto';
 
 const { Meta } = Card;
 const { Option } = Select;
@@ -15,6 +22,15 @@ const EditarProducto = () => {
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [initialFormValues, setInitialFormValues] = useState(null);
     const [form] = Form.useForm();
+    const [openp, setOpenp] = useState(false);
+
+    const showDrawerp = () => {
+        setOpenp(true);
+    };
+
+    const onClosep = () => {
+        setOpenp(false);
+    };
 
     const fetchData = async (page) => {
         try {
@@ -190,6 +206,61 @@ const EditarProducto = () => {
     };
     return (
         <div>
+            <Row>
+                <Col md={12}>
+                    <Segmented
+                        options={[
+                            {
+                                label: (
+                                    <Tooltip title="Productos">
+                                        <div style={{ padding: 4 }}>
+                                            <Avatar shape="square" src={imgproductos} size="large" />
+                                        </div>
+                                    </Tooltip>
+                                ),
+                                value: 'Productos',
+                            },
+                            {
+                                label: (
+                                    <Tooltip title="Categorías">
+                                        <div style={{ padding: 4 }}>
+                                            <Avatar shape="square" size="large" src={categoriaproducto} />
+                                        </div>
+                                    </Tooltip>
+                                ),
+                                value: 'Categorias',
+                            }
+                            ,
+                            {
+                                label: (
+                                    <Tooltip title="Tipos de productos">
+                                        <div style={{ padding: 4 }}>
+                                            <Avatar shape="square" size="large" src={tipoproducto} />
+                                        </div>
+                                    </Tooltip>
+                                ),
+                                value: 'tipoproducto',
+                            }
+                            ,
+                            {
+                                label: (
+                                    <Tooltip title="Unidad de medida">
+                                        <div style={{ padding: 4 }}>
+                                            <Avatar shape="square" size="large" src={um} />
+                                        </div>
+                                    </Tooltip>
+                                ),
+                                value: 'um',
+                            }
+                        ]}
+                    />
+                </Col>
+                <Col md={12}>
+                    <Button type="primary" style={{ width: '100%', margin: '2%' }} onClick={showDrawerp}>
+                        Crear nuevo producto
+                    </Button>
+                </Col>
+            </Row>
             <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
                 {productos.map((producto) => (
                     <Card
@@ -218,6 +289,19 @@ const EditarProducto = () => {
                     ? showModalContent(initialFormValues)
                     : null}
             </Modal>
+            <Drawer
+                title="Crear producto"
+                width={720}
+                onClose={onClosep}
+                open={openp}
+                styles={{
+                    body: {
+                        paddingBottom: 80,
+                    },
+                }}
+            >
+                <CrearProducto />
+            </Drawer>
         </div>
     );
 };

@@ -7,6 +7,7 @@ import administrador from './res/administrador.png'
 import camarero from './res/camarero.png';
 import cocinero from './res/cocinero.png';
 import EditarEmpleado from './EditarEmpleado';
+import CrearEmpleadoForm from './crearempleado';
 import anadir from './res/anadir.png'
 
 const Empleados = ({ }) => {
