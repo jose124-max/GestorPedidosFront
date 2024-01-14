@@ -1,20 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Avatar, Modal, Form, Input, Button, Select, Badge, message } from 'antd';
+import { Card, Row, Col, Avatar, Modal, Form, Input, Button, Select, Badge, Drawer } from 'antd';
 
-const EditarEmpleado = ({idsucur}) => {
+const EditarEmpleado = ({ idsucur, oficio }) => {
     const [sucursales, setSucursales] = useState([]);
     const [empleados, setEmpleados] = useState(null);
     const [visible, setVisible] = useState(false);
     const [editedEmpleado, setEditedEmpleado] = useState(null);
     const [form] = Form.useForm();
+    const [opene, setOpene] = useState(false);
+
+    const showDrawere = (empleado) => {
+        setOpene(true);
+        setEditedEmpleado(empleado);
+        form.setFieldsValue({
+            nombre: empleado.nombre,
+            apellido: empleado.apellido,
+            telefono: empleado.telefono,
+            sucursales: empleado.sucursal,
+        });
+    };
+
+    const onClosee = () => {
+        setOpene(false);
+    };
+
 
     useEffect(() => {
-        console.log('llegó: '+idsucur)
+        console.log('llegó: ' + idsucur)
         const fetchData = async () => {
             try {
-                
-                if(!idsucur){
-                    idsucur=0;
+
+                if (!idsucur) {
+                    idsucur = 0;
                 }
                 const responseEmpleados = await fetch('http://127.0.0.1:8000/empleado/listar-empleados/' + idsucur + '/');
 
@@ -85,11 +102,11 @@ const EditarEmpleado = ({idsucur}) => {
             setVisible(false);
             const fetchData = async () => {
                 try {
-                    if(!idsucur){
-                        idsucur=0;
+                    if (!idsucur) {
+                        idsucur = 0;
                     }
                     const responseEmpleados = await fetch('http://127.0.0.1:8000/empleado/listar-empleados/' + idsucur + '/');
-    
+
                     if (!responseEmpleados.ok) {
                         throw new Error('Error fetching empleados');
                     }
@@ -120,41 +137,41 @@ const EditarEmpleado = ({idsucur}) => {
     return (
         <div>
             {Object.keys(empleados).map((tipoEmpleado, index) => (
-                <Card key={index} title={tipoEmpleado} style={{ margin: '16px 0' }}>
-                    <Row gutter={16}>
-                        {empleados[tipoEmpleado].map((empleado, i) => (
-                            <Col span={8} key={i}>
-                                <Card onClick={() => handleEditClick(empleado)}>
-                                    <Card.Meta
-                                        avatar={<Avatar>{empleado.nombre[0]}</Avatar>}
-                                        id={`id: ${empleado.id}`}
-                                        tipo={`tipo: ${empleado.tipo}`}
-                                        sucursal={`sucursal: ${empleado.sucursal}`}
-                                        title={`${empleado.nombre} ${empleado.apellido}`}
-                                        description={`Teléfono: ${empleado.telefono}`}
-                                    />
-                                    <br />
-                                    <Badge count={getSucursalNombre(empleado.sucursal)} showZero color='#CE6F04' />
-                                </Card>
-                            </Col>
-                        ))}
-                    </Row>
-                </Card>
+                tipoEmpleado === oficio && (
+                    <Card key={index} title={tipoEmpleado} style={{ margin: '16px 0' }}>
+                        <Row gutter={16}>
+                            {empleados[tipoEmpleado].map((empleado, i) => (
+                                <Col md={8} key={i}>
+                                    <Card onClick={() => showDrawere(empleado)}>
+                                        <Card.Meta
+                                            avatar={<Avatar>{empleado.nombre[0]}</Avatar>}
+                                            id={`id: ${empleado.id}`}
+                                            tipo={`tipo: ${empleado.tipo}`}
+                                            sucursal={`sucursal: ${empleado.sucursal}`}
+                                            title={`${empleado.nombre} ${empleado.apellido}`}
+                                            description={`Teléfono: ${empleado.telefono}`}
+                                        />
+                                        <br />
+                                        <Badge count={getSucursalNombre(empleado.sucursal)} showZero color='#CE6F04' />
+                                    </Card>
+                                </Col>
+                            ))}
+                        </Row>
+                    </Card>
+                )
             ))}
-            <Modal
-                title="Editar Empleado"
-                visible={visible}
-                onCancel={handleCancel}
-                footer={[
-                    <Button key="cancel" onClick={handleCancel}>
-                        Cancelar
-                    </Button>,
-                    <Button key="submit" type="primary" onClick={handleSave}>
-                        Guardar
-                    </Button>,
-                ]}
+            <Drawer
+                title="Editar información de empresa"
+                width={720}
+                onClose={onClosee}
+                open={opene}
+                styles={{
+                    body: {
+                        paddingBottom: 80,
+                    },
+                }}
             >
-                <Form form={form} layout="vertical">
+                <Form form={form} onFinish={handleSave} layout="vertical">
                     <Form.Item label="Nombre" name="nombre">
                         <Input />
                     </Form.Item>
@@ -173,8 +190,11 @@ const EditarEmpleado = ({idsucur}) => {
                             ))}
                         </Select>
                     </Form.Item>
+                    <Button key="submit" type="primary" htmlType="submit">
+                        Guardar
+                    </Button>
                 </Form>
-            </Modal>
+            </Drawer>
         </div>
     );
 };
