@@ -65,7 +65,7 @@ const AdminSucursal = ({ idsucursalx }) => {
             if (responseData.mensaje) {
                 notification.success({
                     message: 'Éxito',
-                    description: responseData.mensaje,
+                    description: 'Horario editado exitosamente',
                 });
                 fetchData();
                 handleHorarioClick();
@@ -83,6 +83,7 @@ const AdminSucursal = ({ idsucursalx }) => {
             });
         }
     };
+
 
     const handleHorarioCreate = async (jsonHorario) => {
         try {
@@ -104,14 +105,14 @@ const AdminSucursal = ({ idsucursalx }) => {
             if (responseData.mensaje) {
                 notification.success({
                     message: 'Éxito',
-                    description: responseData.mensaje,
+                    description: 'Horario creado exitosamente',
                 });
                 fetchData();
                 handleHorarioClick();
             } else {
                 notification.error({
                     message: 'Error',
-                    description: 'Error al crear el horario',
+                    description: 'Error al crear el horario: ' + responseData.error,
                 });
             }
         } catch (error) {
@@ -121,6 +122,7 @@ const AdminSucursal = ({ idsucursalx }) => {
             });
         }
     };
+
 
     useEffect(() => {
 
@@ -138,9 +140,13 @@ const AdminSucursal = ({ idsucursalx }) => {
                 setHorarioDetails(data.detalles);
             }
         } catch (error) {
-            message.warning('No haz creado un horario de atención para tu sucursal');
+            notification.warning({
+                message: 'No hay horario',
+                description: 'No haz creado un horario de atención para tu sucursal',
+            });
         }
     };
+
 
     const fetchData = async () => {
         try {
