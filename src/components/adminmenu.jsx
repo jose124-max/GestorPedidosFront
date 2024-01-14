@@ -6,6 +6,7 @@ import EditarCliente from './editarcliente.jsx';
 import MenuG from './menu.jsx';
 
 
+
 import CrearTipoProducto from './creartipoproducto';
 import CrearEmpleadoForm from './crearempleado';
 import CrearCategoria from './crearcategoria';

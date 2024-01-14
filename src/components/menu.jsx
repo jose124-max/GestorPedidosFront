@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import { Layout, Menu, Image, Avatar, Card, Badge, Tooltip } from 'antd';
+import { Image, Avatar, Card, Badge, Tooltip } from 'antd';
 import { Container, Row, Col, Button, Form, Nav, Navbar, NavDropdown, Dropdown, Offcanvas } from 'react-bootstrap';
 import imgempresa from './res/imgempresa.png';
 import imgempleado from './res/imgempleado.png';
@@ -10,6 +10,7 @@ import imgmesas from './res/imgmesas.png';
 import imgcombos from './res/imgcombos.png';
 import imgrecompensa from './res/imgrecompensa.png';
 import Empresa from './Empresa';
+import Empleados from './empleados.jsx';
 
 
 const MenuG = () => {
@@ -91,6 +92,7 @@ const MenuG = () => {
                                                 preview={false}
                                             />}
                                         className="text-center"
+                                        onClick={() => handleCardClick('empleado')}
                                     >
                                         <Meta title={tooltipTitle2}></Meta>
                                     </Card>
@@ -211,6 +213,22 @@ const MenuG = () => {
                                     Atrás
                                 </Button>
                                 <Empresa />
+                            </Col>
+                        </Row>
+
+                    </>)}
+                    {currentPage === 'empleado' && (
+                    <>
+                        <Row>
+                            <Col md={12}>
+                                <Button
+                                    variant="success"
+                                    style={{ position: 'fixed', right: '16px', bottom: '16px', zIndex: 1000 }}
+                                    onClick={() => handleAtrasClick()}
+                                >
+                                    Atrás
+                                </Button>
+                                <Empleados />
                             </Col>
                         </Row>
 
