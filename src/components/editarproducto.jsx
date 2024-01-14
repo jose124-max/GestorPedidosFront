@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Card, Input, Pagination, Button, Select, Modal, Upload, Tooltip, Badge, Segmented, Avatar, Checkbox, Drawer } from 'antd';
+import { Form, Card, Input, Pagination, Button, Select, Modal, Upload, Tooltip, Badge, Segmented, Avatar, Checkbox, Drawer, Divider } from 'antd';
 import { Row, Col } from 'react-bootstrap';
 
 import { UploadOutlined } from '@ant-design/icons';
@@ -8,6 +8,7 @@ import categoriaproducto from './res/categoriaproducto.png';
 import tipoproducto from './res/tipoproducto.png'
 import um from './res/um.png'
 import CrearProducto from './CrearProducto';
+import EditarTipoProducto from './editartipoproducto'
 
 const { Meta } = Card;
 const { Option } = Select;
@@ -23,6 +24,11 @@ const EditarProducto = () => {
     const [initialFormValues, setInitialFormValues] = useState(null);
     const [form] = Form.useForm();
     const [openp, setOpenp] = useState(false);
+    const [selectedOpcion, setSelectedOpcion] = useState('Productos');
+
+    const Changueopcion = (value) => {
+        setSelectedOpcion(value);
+    }
 
     const showDrawerp = () => {
         setOpenp(true);
@@ -253,32 +259,62 @@ const EditarProducto = () => {
                                 value: 'um',
                             }
                         ]}
+                        value={selectedOpcion}
+                        onChange={Changueopcion}
                     />
                 </Col>
-                <Col md={12}>
-                    <Button type="primary" style={{ width: '100%', margin: '2%' }} onClick={showDrawerp}>
-                        Crear nuevo producto
-                    </Button>
-                </Col>
-            </Row>
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
-                {productos.map((producto) => (
-                    <Card
-                        key={producto.id_producto}
-                        hoverable
-                        style={{ width: 240, margin: '16px' }}
-                        cover={<img alt={producto.nombreproducto} src={`data:image/png;base64,${producto.imagenp}`} />}
-                        onClick={() => handleEditClick(producto.id_producto)}
-                    >
-                        <Meta title={producto.nombreproducto} description={producto.descripcionproducto} />
-                        <Badge count={producto.puntosp} showZero color='#faad14' />
-                        <Badge count={'$' + producto.preciounitario} showZero color='#06CE15' style={{ margin: '10px' }} />
-                        <Badge count={getCategoriaNombre(producto.id_categoria)} showZero color='#CE6F04' />
+                {selectedOpcion === 'Productos' && (
+                    <>
+                        <Divider>Control productos</Divider>
+                        <Col md={12}>
+                            <Button type="primary" style={{ width: '100%', margin: '2%' }} onClick={showDrawerp}>
+                                Crear nuevo producto
+                            </Button>
+                        </Col>
+                        <Col md={12}>
+                            <Row>
+                                <Col md={3}>
+                                    {productos.map((producto) => (
+                                        <Card
+                                            key={producto.id_producto}
+                                            hoverable
+                                            style={{ width: 240, margin: '16px' }}
+                                            cover={<img alt={producto.nombreproducto} src={`data:image/png;base64,${producto.imagenp}`} />}
+                                            onClick={() => handleEditClick(producto.id_producto)}
+                                        >
+                                            <Meta title={producto.nombreproducto} description={producto.descripcionproducto} />
+                                            <Badge count={producto.puntosp} showZero color='#faad14' />
+                                            <Badge count={'$' + producto.preciounitario} showZero color='#06CE15' style={{ margin: '10px' }} />
+                                            <Badge count={getCategoriaNombre(producto.id_categoria)} showZero color='#CE6F04' />
 
-                    </Card>
-                ))}
-            </div>
-            <Pagination current={currentPage} total={total} onChange={handlePageChange} pageSize={8} style={{ marginTop: '16px', textAlign: 'center' }} />
+                                        </Card>
+                                    ))}
+                                </Col>
+                            </Row>
+                            <Pagination current={currentPage} total={total} onChange={handlePageChange} pageSize={8} style={{ marginTop: '16px', textAlign: 'center' }} />
+                        </Col>
+                    </>)}
+                {selectedOpcion === 'Categorias' && (
+                    <>
+                    <Divider>Control categorías</Divider>
+                        <Col md={12}>
+
+                        </Col>
+                    </>)}
+                {selectedOpcion === 'tipoproducto' && (
+                    <>
+                    <Divider>Control tipo de productos</Divider>
+                        <Col md={12}>
+                        <EditarTipoProducto/>
+                        </Col>
+                    </>)}
+                {selectedOpcion === 'um' && (
+                    <>
+                        <Col md={12}>
+
+                        </Col>
+                    </>)}
+            </Row>
             <Modal
                 title="Editar Producto"
                 visible={editModalVisible}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import { Image, Avatar, Card, Badge, Tooltip } from 'antd';
+import { Image, Avatar, Card, Badge, Tooltip, Divider } from 'antd';
 import { Container, Row, Col, Button, Form, Nav, Navbar, NavDropdown, Dropdown, Offcanvas } from 'react-bootstrap';
 import imgempresa from './res/imgempresa.png';
 import imgempleado from './res/imgempleado.png';
@@ -271,6 +271,7 @@ const MenuG = () => {
                     </>)}
                     {currentPage == 'productos' && (
                     <>
+                    <Divider>Productos</Divider>
                         <Row>
                             <Col md={12}>
                                 <EditarProducto/>

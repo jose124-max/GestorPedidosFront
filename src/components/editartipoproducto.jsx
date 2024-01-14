@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Input, message } from 'antd';
+import { Table, Button, Modal, Form, Input, message,Drawer } from 'antd';
+import { Row, Col } from 'react-bootstrap';
+import CrearTipoProducto from './creartipoproducto'
 
 const EditarTipoProducto = () => {
   const [form] = Form.useForm();
@@ -7,6 +9,16 @@ const EditarTipoProducto = () => {
   const [data, setTiposProductos] = useState([]);
   const [tipoProductoId, setTipoProductoId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [opentp, setOpentp] = useState(false);
+
+  const showDrawertp = () => {
+    setOpentp(true);
+  };
+
+  const onClosetp = () => {
+    setOpentp(false);
+};
+
 
   useEffect(() => {
     // Obtener la lista de tipos de productos al cargar el componente
@@ -92,7 +104,17 @@ const EditarTipoProducto = () => {
 
   return (
     <div>
-      <Table dataSource={data} columns={columns} rowKey="id_tipoproducto" />
+      <Row>
+        <Col md={12}>
+          <Button type="primary" style={{ width: '100%', margin: '2%' }} onClick={showDrawertp}>
+            Crear nuevo tipo de producto
+          </Button>
+        </Col>
+        <Col md={12}>
+          <Table dataSource={data} columns={columns} rowKey="id_tipoproducto" />
+        </Col>
+      </Row>
+
       <Modal
         title="Editar Tipo de Producto"
         open={modalVisible}
@@ -147,6 +169,19 @@ const EditarTipoProducto = () => {
           </Form.Item>
         </Form>
       </Modal>
+      <Drawer
+        title="Crear tipo de producto"
+        width={720}
+        onClose={onClosetp}
+        open={opentp}
+        styles={{
+          body: {
+            paddingBottom: 80,
+          },
+        }}
+      >
+        <CrearTipoProducto />
+      </Drawer>
     </div>
   );
 };

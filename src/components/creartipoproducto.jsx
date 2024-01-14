@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Card, message } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 
 const CrearTipoProducto = () => {
   const [loading, setLoading] = useState(false);
@@ -37,7 +37,6 @@ const CrearTipoProducto = () => {
   const [form] = Form.useForm();
 
   return (
-    <Card title="Crear Tipo de Producto" style={{ width: 400, margin: 'auto', marginTop: 50 }}>
       <Form form={form} onFinish={onFinish} layout="vertical">
         <Form.Item
           label="Nombre del tipo de producto"
@@ -93,7 +92,6 @@ const CrearTipoProducto = () => {
           </Button>
         </Form.Item>
       </Form>
-    </Card>
   );
 };
 
