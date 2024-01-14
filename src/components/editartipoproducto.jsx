@@ -24,7 +24,6 @@ const EditarTipoProducto = () => {
 
   const onClosetp = () => {
     setOpentp(false);
-    listarp();
   };
 
   const eliminartp= async (idtp)=>{
@@ -151,6 +150,7 @@ const EditarTipoProducto = () => {
       if (response.ok) {
         message.success(responseData.mensaje);
         setModalVisible(false);
+        listarp();
       } else {
         message.error(responseData.error || 'Hubo un error al realizar la solicitud');
       }
