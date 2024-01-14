@@ -57,8 +57,8 @@ const Empleados = ({ }) => {
                                         </div>
                                     </Tooltip>
                                 ),
-                                value: 'Administradores', 
-                            }, 
+                                value: 'Administradores',
+                            },
                             {
                                 label: (
                                     <Tooltip title="Motorizados">
