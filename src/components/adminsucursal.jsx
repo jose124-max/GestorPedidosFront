@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Table, Select, Switch, notification, Modal, Upload, Card, Tooltip, Watermark, Badge, Tag, Divider, Drawer,Segmented,Avatar  } from 'antd';
+import { Form, Input, Button, Table, Select, Switch, notification, Modal, Upload, Card, Tooltip, Watermark, Badge, Tag, Divider, Drawer, Segmented, Avatar } from 'antd';
 import { Row, Col } from 'react-bootstrap';
-import { UploadOutlined, EditFilled,UserOutlined  } from '@ant-design/icons';
+import { UploadOutlined, EditFilled, UserOutlined } from '@ant-design/icons';
 import MapaActual from './mapaactual';
 import CrearHorariosSemanales from './crearhorarioS';
 import TextArea from 'antd/es/input/TextArea';
@@ -42,7 +42,7 @@ const AdminSucursal = ({ idsucursalx }) => {
     };
 
     const handleOficioChange = (value) => {
-        if(value=='agregar'){
+        if (value == 'agregar') {
             showDrawere();
             return;
         }
@@ -678,105 +678,66 @@ const AdminSucursal = ({ idsucursalx }) => {
                     </Card>
 
                 </Col>
-                <Col md={12}>
-                    <Card
-                        hoverable
-                        title={'Empleados'}
-                        style={{
-                            width: '100%', border: '1px solid #A4A4A4', marginTop: '5%',
-                            height: '100%',
-                            marginLeft: '1px',
-                        }}
-                    >
-                        <Col md={12}>
-                            <Segmented
-                                options={[
-                                    {
-                                        label: (
-                                            <Tooltip title="Administradores">
-                                                <div style={{ padding: 4 }}>
-                                                    <Avatar style={{ backgroundColor: '#87d068' }} src={administrador} size="large" />
-                                                </div>
-                                            </Tooltip>
-                                        ),
-                                        value: 'Administradores',
-                                    },
-                                    {
-                                        label: (
-                                            <Tooltip title="Motorizados">
-                                                <div style={{ padding: 4 }}>
-                                                    <Avatar style={{ backgroundColor: '#87d068' }} size="large" src={repartidor} />
-                                                </div>
-                                            </Tooltip>
-                                        ),
-                                        value: 'Motorizados',
-                                    },
-                                    {
-                                        label: (
-                                            <Tooltip title="Meseros">
-                                                <div style={{ padding: 4 }}>
-                                                    <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} size="large" src={camarero} />
-                                                </div>
-                                            </Tooltip>
-                                        ),
-                                        value: 'Meseros',
-                                    },
-                                    {
-                                        label: (
-                                            <Tooltip title="Jefes de cocina">
-                                                <div style={{ padding: 4 }}>
-                                                    <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} size="large" src={cocinero} />                                        </div>
-                                            </Tooltip>
-                                        ),
-                                        value: 'JefesCocina',
-                                    },
-                                    {
-                                        label: (
-                                            <Tooltip title="Agregar empleados">
-                                                <div style={{ padding: 4 }}>
-                                                    <Avatar style={{ backgroundColor: '#ffff' }} icon={<UserOutlined />} size="large" src={anadir} />                                        </div>
-                                            </Tooltip>
-                                        ),
-                                        value: 'agregar',
-                                    },
-                                ]}
-                                value={selectedOficio}
-                                onChange={handleOficioChange}
-                            />
-                        </Col>
-
-                        <EditarEmpleado idsucur={idsucursalx} ></EditarEmpleado>
-                    </Card>
-
-
-
-
-                </Col>
+                <Row>
+                    <Col md={12}>
+                        <Segmented
+                            options={[
+                                {
+                                    label: (
+                                        <Tooltip title="Administradores">
+                                            <div style={{ padding: 4 }}>
+                                                <Avatar style={{ backgroundColor: '#87d068' }} src={administrador} size="large" />
+                                            </div>
+                                        </Tooltip>
+                                    ),
+                                    value: 'Administradores',
+                                },
+                                {
+                                    label: (
+                                        <Tooltip title="Motorizados">
+                                            <div style={{ padding: 4 }}>
+                                                <Avatar style={{ backgroundColor: '#87d068' }} size="large" src={repartidor} />
+                                            </div>
+                                        </Tooltip>
+                                    ),
+                                    value: 'Motorizados',
+                                },
+                                {
+                                    label: (
+                                        <Tooltip title="Meseros">
+                                            <div style={{ padding: 4 }}>
+                                                <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} size="large" src={camarero} />
+                                            </div>
+                                        </Tooltip>
+                                    ),
+                                    value: 'Meseros',
+                                },
+                                {
+                                    label: (
+                                        <Tooltip title="Jefes de cocina">
+                                            <div style={{ padding: 4 }}>
+                                                <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} size="large" src={cocinero} />                                        </div>
+                                        </Tooltip>
+                                    ),
+                                    value: 'JefesCocina',
+                                },
+                                {
+                                    label: (
+                                        <Tooltip title="Agregar empleados">
+                                            <div style={{ padding: 4 }}>
+                                                <Avatar style={{ backgroundColor: '#ffff' }} icon={<UserOutlined />} size="large" src={anadir} />                                        </div>
+                                        </Tooltip>
+                                    ),
+                                    value: 'agregar',
+                                },
+                            ]}
+                            value={selectedOficio}
+                            onChange={handleOficioChange}
+                        />
+                    </Col>
+                </Row>
+                <EditarEmpleado idsucur={idsucursalx} oficio={selectedOficio}></EditarEmpleado>
             </Row>
-            <div>
-                <Table
-                    columns={[
-                        { title: 'Empleados', dataIndex: 'Empleados', key: 'Empleados' },
-                    ]}
-                    dataSource={[
-                        {
-                            title: 'Empleados',
-                            dataIndex: 'Empleados',
-                            key: 'Empleados',
-                            Empleados: idsucursalx ? (
-                                <EditarEmpleado idsucur={idsucursalx} />
-                            ) : (
-                                <div>
-                                    <EditarEmpleado idsucur={idsucursalx} />
-                                </div>
-                            ),
-                        },
-                    ]}
-                    pagination={false}
-                    size="middle"
-                    bordered
-                />
-            </div>
             <Drawer
                 title="Crear empleado"
                 width={720}
