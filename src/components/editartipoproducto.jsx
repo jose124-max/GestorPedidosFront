@@ -15,6 +15,7 @@ const EditarTipoProducto = () => {
 
   const onCloseetp = () => {
     setOpenetp(false);
+    listarp();
   };
 
   const showDrawertp = () => {
@@ -23,15 +24,49 @@ const EditarTipoProducto = () => {
 
   const onClosetp = () => {
     setOpentp(false);
+    listarp();
   };
 
+  const eliminartp= async (idtp)=>{
+    try {
+      const formData = new FormData();
+      console.log('El valor enviado es :' + idtp)
+      formData.append('sestado', '0');
+      const response = await fetch(`http://127.0.0.1:8000/producto/editar_tipo_producto/${idtp}/`, {
+        method: 'POST',
+        body: formData,
+      });
 
-  useEffect(() => {
-    // Obtener la lista de tipos de productos al cargar el componente
-    fetch('http://127.0.0.1:8000/producto/listarproductos/')
+      if (response.ok) {
+        message.success('Sucursal eliminada con exito');
+        setModalVisible(false);
+        listarp();
+      } else {
+        message.error(responseData.error || 'Hubo un error al realizar la solicitud');
+      }
+    } catch (error) {
+      message.error('Hubo un error al realizar la solicitud');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const listarp= async ()=>{
+    try {
+      fetch('http://127.0.0.1:8000/producto/listarproductos/')
       .then(response => response.json())
       .then(data => setTiposProductos(data.tipos_productos))
       .catch(error => console.error('Error fetching tipos de productos:', error));
+    } catch (error) {
+      message.error('Hubo un error al realizar la solicitud');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+
+  useEffect(() => {
+    listarp();
   }, []);
 
   const columns = [
@@ -63,7 +98,7 @@ const EditarTipoProducto = () => {
               <Popconfirm
                 title="Eliminar tipo de producto"
                 description="¿Estas seguro que que deseas eliminar el tipo de producto?"
-                onConfirm={'confirm'}
+                onConfirm={() =>eliminartp(record.id_tipoproducto)}
                 onCancel={'cancel'}
                 okText="Yes"
                 cancelText="No"
@@ -116,12 +151,6 @@ const EditarTipoProducto = () => {
       if (response.ok) {
         message.success(responseData.mensaje);
         setModalVisible(false);
-
-        // Actualizar la lista de tipos de productos después de la edición
-        fetch('http://127.0.0.1:8000/producto/listarproductos/')
-          .then(response => response.json())
-          .then(data => setTiposProductos(data.tipos_productos))
-          .catch(error => console.error('Error fetching tipos de productos:', error));
       } else {
         message.error(responseData.error || 'Hubo un error al realizar la solicitud');
       }
