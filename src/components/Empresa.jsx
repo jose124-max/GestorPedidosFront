@@ -13,6 +13,10 @@ const Empresa = () => {
   const [form] = Form.useForm();
   const [opene, setOpene] = useState(false);
 
+  const onFinishFailed = (errorInfo) => {
+    console.log('Falló la validación:', errorInfo);
+  };
+
   const showDrawere = () => {
     setOpene(true);
     form.setFieldsValue({
@@ -94,9 +98,9 @@ const Empresa = () => {
         method: 'POST',
         body: formData,
       });
-
+  
       if (respuesta.ok) {
-        message.success('Datos de la empresa actualizados correctamente');
+        message.success('Datos de la empresa actualizados correctamente'); // Mensaje de éxito
         onClosee(false);
         obtenerInformacionEmpresa();
         window.location.href = '/home';
@@ -200,31 +204,38 @@ const Empresa = () => {
           },
         }}
       >
-        <Form form={form} onFinish={manejarEdicion}>
-          <Form.Item label="Nombre" name="enombre" rules={[{ required: true }]}>
+        <Form form={form} onFinish={manejarEdicion} onFinishFailed={onFinishFailed}>
+        <Form.Item label="Nombre" name="enombre" rules={[{ required: true, message: 'Por favor, ingresa el nombre' }, { max: 200, message: 'El nombre debe tener máximo 200 caracteres' }]}>
             <Input />
           </Form.Item>
-          <Form.Item label="Dirección" name="direccion">
+          <Form.Item label="Dirección" name="direccion" rules={[{ max: 300, message: 'La dirección debe tener máximo 300 caracteres' }]}>
             <Input />
           </Form.Item>
-          <Form.Item label="Teléfono" name="etelefono"
-            rules={[{
-              pattern: /^[0-9]+$/,
-              message: 'Por favor, ingresa solo números en el teléfono',
-            }]}>
+          <Form.Item
+            label="Teléfono"
+            name="etelefono"
+            rules={[
+              { pattern: /^[0-9]+$/, message: 'Por favor, ingresa solo números en el teléfono' },
+              { max: 10, message: 'El teléfono debe tener máximo 10 dígitos' },
+            ]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item label="Correo Electrónico" name="correoelectronico" type="email"
-            rules={[{ type: 'email', message: 'Por favor, ingresa un correo electrónico válido' },]}>
+          <Form.Item
+            label="Correo Electrónico"
+            name="correoelectronico"
+            type="email"
+            rules={[
+              { type: 'email', message: 'Por favor, ingresa un correo electrónico válido' },
+              { max: 256, message: 'El correo electrónico debe tener máximo 256 caracteres' },
+            ]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item label="Fecha de Fundación" name="fechafundacion" type="date">
+          <Form.Item label="Sitio Web" name="sitioweb" rules={[{ max: 2000, message: 'El sitio web debe tener máximo 2000 caracteres' }]}>
             <Input />
           </Form.Item>
-          <Form.Item label="Sitio Web" name="sitioweb">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Eslogan" name="eslogan">
+          <Form.Item label="Eslogan" name="eslogan" rules={[{ max: 300, message: 'El eslogan debe tener máximo 300 caracteres' }]}>
             <Input />
           </Form.Item>
           <Form.Item
