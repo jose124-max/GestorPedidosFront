@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import { Divider, Avatar, Flex, Segmented, Tooltip, Select } from 'antd';
+import { Divider, Avatar, Flex, Segmented, Tooltip, Select,Drawer } from 'antd';
 import { Container, Row, Col } from 'react-bootstrap';
 import repartidor from './res/repartidor.png';
 import administrador from './res/administrador.png';
@@ -8,6 +8,7 @@ import camarero from './res/camarero.png';
 import cocinero from './res/cocinero.png';
 import EditarEmpleado from './EditarEmpleado';
 import anadir from './res/anadir.png';
+import CrearEmpleadoForm from './crearempleado';
 
 const { Option } = Select;
 
@@ -16,6 +17,15 @@ const Empleados = ({ }) => {
     const [selectedSucursal, setSelectedSucursal] = useState(0);
     const [sucursales, setSucursales] = useState([]);
     const [loadingSucursales, setLoadingSucursales] = useState(true);
+    const [opene, setOpene] = useState(false);
+
+    const onClosee = () => {
+        setSelectedOficio('Administradores');
+        setOpene(false);
+    };
+    const showDrawere = () => {
+        setOpene(true);
+    };
 
     useEffect(() => {
         fetch('http://127.0.0.1:8000/sucursal/sucusarleslist/')
@@ -33,6 +43,10 @@ const Empleados = ({ }) => {
     }, []);
 
     const handleOficioChange = (value) => {
+        if (value == 'agregar') {
+            showDrawere();
+            return;
+        }
         setSelectedOficio(value);
     };
 
@@ -101,6 +115,7 @@ const Empleados = ({ }) => {
                             },
                         ]}
                         onChange={handleOficioChange}
+                        value={selectedOficio}
                     />
                 </Col>
                 <Col md={12}>
@@ -122,6 +137,19 @@ const Empleados = ({ }) => {
                     <EditarEmpleado oficio={selectedOficio} sucursal={selectedSucursal} />
                 </Col>
             </Row>
+            <Drawer
+                title="Crear empleado"
+                width={720}
+                onClose={onClosee}
+                open={opene}
+                styles={{
+                    body: {
+                        paddingBottom: 80,
+                    },
+                }}
+            >
+                <CrearEmpleadoForm></CrearEmpleadoForm>
+            </Drawer>
         </>
     );
 };
