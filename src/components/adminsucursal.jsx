@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Table, Select, Switch, message, Modal, Upload, Card, Tooltip, Watermark, Badge, Tag, Divider, Drawer,Image } from 'antd';
+import { Form, Input, Button, Table, Select, Switch, notification, Modal, Upload, Card, Tooltip, Watermark, Badge, Tag, Divider, Drawer } from 'antd';
 import { Row, Col } from 'react-bootstrap';
 import { UploadOutlined, EditFilled } from '@ant-design/icons';
 import MapaActual from './mapaactual';
@@ -32,7 +32,7 @@ const AdminSucursal = ({ idsucursalx }) => {
         setOpenu(false);
     };
 
-    
+
     const editarSucursal = () => {
         if (horario == 'mostrar') {
             sethorario('editar')
@@ -63,17 +63,24 @@ const AdminSucursal = ({ idsucursalx }) => {
             const responseData = await response.json();
 
             if (responseData.mensaje) {
-                message.success(responseData.mensaje);
+                notification.success({
+                    message: 'Éxito',
+                    description: responseData.mensaje,
+                });
                 fetchData();
                 handleHorarioClick();
-                sethorario('mostrar')
-
+                sethorario('mostrar');
             } else {
-                message.error('Error al editar el horario' +
-                    responseData.error);
+                notification.error({
+                    message: 'Error',
+                    description: 'Error al editar el horario: ' + responseData.error,
+                });
             }
         } catch (error) {
-            message.error('Error al validar el formulario');
+            notification.error({
+                message: 'Error',
+                description: 'Error al validar el formulario',
+            });
         }
     };
 
@@ -83,8 +90,6 @@ const AdminSucursal = ({ idsucursalx }) => {
             const { nombreh, hordescripcion } = formData;
 
             const formDataObject = new FormData();
-            console.log(JSON.stringify(jsonHorario));
-            console.log(nombreh);
             formDataObject.append('nombreh', 'horarioSucursal' + idsucursalx);
             formDataObject.append('detalle', JSON.stringify(jsonHorario));
             formDataObject.append('idsucursal', idsucursalx);
@@ -97,15 +102,23 @@ const AdminSucursal = ({ idsucursalx }) => {
             const responseData = await response.json();
 
             if (responseData.mensaje) {
-                message.success(responseData.mensaje);
+                notification.success({
+                    message: 'Éxito',
+                    description: responseData.mensaje,
+                });
                 fetchData();
                 handleHorarioClick();
-
             } else {
-                message.error('Error al crear el horario');
+                notification.error({
+                    message: 'Error',
+                    description: 'Error al crear el horario',
+                });
             }
         } catch (error) {
-            message.error('Error al validar el formulario');
+            notification.error({
+                message: 'Error',
+                description: 'Error al validar el formulario',
+            });
         }
     };
 
@@ -204,22 +217,30 @@ const AdminSucursal = ({ idsucursalx }) => {
             formData.append('snombre', values.snombre);
 
             if (values.imagensucursal.fileList) {
-
                 formData.append('imagensucursal', fileList[0].originFileObj);
             } else {
                 console.error('Tipo de archivo no válido');
-                // Puedes mostrar un mensaje de error o tomar otras acciones apropiadas.
             }
+
             const response = await fetch('http://127.0.0.1:8000/sucursal/EditarSucursal/' + idsucursalx, {
                 method: 'POST',
                 body: formData,
             });
 
             const data = await response.json();
-            message.success(data.mensaje);
+
+            notification.success({
+                message: 'Éxito',
+                description: data.mensaje,
+            });
+
             fetchData();
         } catch (error) {
             console.error('Error al guardar los datos:', error);
+            notification.error({
+                message: 'Error',
+                description: 'Error al guardar los datos: ' + error.message,
+            });
         }
     };
 
@@ -230,10 +251,8 @@ const AdminSucursal = ({ idsucursalx }) => {
             onOk() {
                 const formData = new FormData();
 
-                console.log('id_sucursal', idsucursalx);
                 formData.append('id_sucursal', idsucursalx);
                 formData.append('latitud', latitud);
-                console.log('latitud' + latitud);
                 formData.append('longitud', longitud);
 
                 fetch('http://127.0.0.1:8000/sucursal/editarubicacion/', {
@@ -242,23 +261,31 @@ const AdminSucursal = ({ idsucursalx }) => {
                 })
                     .then(response => {
                         if (response.ok) {
-                            message.success('Ubicacion actualizada correctamente');
+                            notification.success({
+                                message: 'Éxito',
+                                description: 'Ubicación actualizada correctamente',
+                            });
                             fetchData();
                         } else {
-                            throw new Error('Error al editar la ubicacion de la sucursal');
+                            throw new Error('Error al editar la ubicación de la sucursal');
                         }
                     })
                     .catch(error => {
-                        message.error(error.message);
-                        console.error('Error al editar la ubicacion de la sucursal', error);
+                        notification.error({
+                            message: 'Error',
+                            description: 'Error al editar la ubicación de la sucursal: ' + error.message,
+                        });
+                        console.error('Error al editar la ubicación de la sucursal', error);
                     });
             },
             onCancel() {
-                message.success('Actualización de ubicación cancelada');
+                notification.success({
+                    message: 'Éxito',
+                    description: 'Actualización de ubicación cancelada',
+                });
             },
         });
     };
-
     const onFinish = (values) => {
         console.log('Valores del formulario:', values);
     };
@@ -355,7 +382,7 @@ const AdminSucursal = ({ idsucursalx }) => {
                         beforeUpload={(file) => {
                             const isImage = /\.(png|jpg|jpeg)$/i.test(file.name);
                             if (isImage) {
-                                
+
                                 return false;
                             }
                             return true;
@@ -645,7 +672,7 @@ const AdminSucursal = ({ idsucursalx }) => {
                     bordered
                 />
             </div>
-            
+
         </>
     );
 };
