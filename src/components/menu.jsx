@@ -13,6 +13,7 @@ import Empresa from './Empresa';
 import Empleados from './empleados.jsx';
 import Sucursales from './sucursales.jsx';
 import subsidiario from './res/subsidiario.png'
+import EditarProducto from './editarproducto.jsx';
 
 
 const MenuG = () => {
@@ -116,6 +117,7 @@ const MenuG = () => {
                                                 preview={false}
                                             />}
                                         className="text-center"
+                                        onClick={() => handleCardClick('productos')}
                                     >
                                         <Meta title={tooltipTitle3}></Meta>
                                     </Card>
@@ -216,6 +218,7 @@ const MenuG = () => {
                                                 preview={false}
                                             />}
                                         className="text-center"
+                                        onClick={() => handleCardClick('sucursal')}
                                     >
                                         <Meta title={tooltipTitle8}></Meta>
                                     </Card>
@@ -262,6 +265,15 @@ const MenuG = () => {
                                 >
                                     Atrás
                                 </Button>
+                            </Col>
+                        </Row>
+
+                    </>)}
+                    {currentPage == 'productos' && (
+                    <>
+                        <Row>
+                            <Col md={12}>
+                                <EditarProducto/>
                             </Col>
                         </Row>
 
