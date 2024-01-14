@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import { Divider, Avatar, Flex, Segmented, Tooltip, Select,Drawer } from 'antd';
+import { Divider, Avatar, Flex, Segmented, Tooltip, Select, Drawer } from 'antd';
 import { Container, Row, Col } from 'react-bootstrap';
 import repartidor from './res/repartidor.png';
 import administrador from './res/administrador.png';
@@ -33,7 +33,7 @@ const Empleados = ({ }) => {
             .then((data) => {
                 setSucursales(data.sucursales);  // Utilizar data.sucursales en lugar de data
             })
-            
+
             .catch((error) => {
                 console.error('Error fetching sucursales:', error);
             })
@@ -118,13 +118,18 @@ const Empleados = ({ }) => {
                         value={selectedOficio}
                     />
                 </Col>
+
                 <Col md={12}>
                     <Select
-                        style={{ width: '100%' }}
+                        style={{ width: '100%', marginTop: '10px' }}
                         placeholder="Seleccione una sucursal"
                         onChange={handleSucursalChange}
                         loading={loadingSucursales}
                     >
+                        {/* Opción para "Todas las sucursales" */}
+                        <Option key="todas" value="Todas las sucursales">
+                            Todas las sucursales
+                        </Option>
                         {sucursales.map((sucursal) => (
                             <Option key={sucursal.id_sucursal} value={sucursal.snombre}>
                                 {sucursal.snombre}

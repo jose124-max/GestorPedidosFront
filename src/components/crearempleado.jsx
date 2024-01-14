@@ -1,10 +1,10 @@
-
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, Select, message } from 'antd';
 
 const { Option } = Select;
 
-const CrearEmpleadoForm = ({ }) => {
+const CrearEmpleadoForm = () => {
+  const [form] = Form.useForm();
   const [sucursales, setSucursales] = useState([]);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const CrearEmpleadoForm = ({ }) => {
         setSucursales(data.sucursales);
       } catch (error) {
         console.error('Error al obtener la lista de sucursales:', error);
-      } 
+      }
     };
 
     fetchSucursales();
@@ -36,6 +36,7 @@ const CrearEmpleadoForm = ({ }) => {
 
       if (response.ok) {
         message.success('Empleado creado exitosamente');
+        form.resetFields(); // Limpiar el formulario
       } else {
         console.error('Error al crear empleado:', data.error || 'Hubo un error al realizar la solicitud');
       }
@@ -43,11 +44,13 @@ const CrearEmpleadoForm = ({ }) => {
       console.error('Error al crear empleado:', error);
     }
   };
+
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
+
   return (
-    <Form name="crearEmpleadoForm" onFinish={onFinish} onFinishFailed={onFinishFailed} layout="vertical">
+    <Form form={form} name="crearEmpleadoForm" onFinish={onFinish} onFinishFailed={onFinishFailed} layout="vertical">
       <Form.Item
         label="Nombre de Usuario"
         name="nombreusuario"
