@@ -11,6 +11,8 @@ import imgcombos from './res/imgcombos.png';
 import imgrecompensa from './res/imgrecompensa.png';
 import Empresa from './Empresa';
 import Empleados from './empleados.jsx';
+import Sucursales from './sucursales.jsx';
+import subsidiario from './res/subsidiario.png'
 
 
 const MenuG = () => {
@@ -22,6 +24,7 @@ const MenuG = () => {
     const tooltipTitle5 = 'Agrega y edita mesas para las sucursales';
     const tooltipTitle6 = 'Agrega y edita combos de los productos';
     const tooltipTitle7 = 'Agrega y gestiona las rescompensas de los productos';
+    const tooltipTitle8 = 'Agrega y gestiona tus sucursales';
     const [currentPage, setCurrentPage] = useState('home');
 
     const handleCardClick = (page) => {
@@ -199,19 +202,32 @@ const MenuG = () => {
                                 </Tooltip>
                             </Badge.Ribbon>
                         </Col>
+                        <Col xs={24} sm={12} md={5} lg={3}>
+                            <Badge.Ribbon text="Sucursales" color="#F84173">
+                                <Tooltip title={tooltipTitle8}>
+                                    <Card
+                                        hoverable
+                                        style={cardStyle}
+                                        cover={
+                                            <Image
+                                                alt="Sucursales"
+                                                src={subsidiario}
+                                                style={{ padding:'5%',height: '150px', width:'auto'}}
+                                                preview={false}
+                                            />}
+                                        className="text-center"
+                                    >
+                                        <Meta title={tooltipTitle8}></Meta>
+                                    </Card>
+                                </Tooltip>
+                            </Badge.Ribbon>
+                        </Col>
                     </>
                 )}
                 {currentPage === 'empresa' && (
                     <>
                         <Row>
                             <Col md={12}>
-                                <Button
-                                    variant="success"
-                                    style={{ position: 'fixed', right: '16px', bottom: '16px', zIndex: 1000 }}
-                                    onClick={() => handleAtrasClick()}
-                                >
-                                    Atrás
-                                </Button>
                                 <Empresa />
                             </Col>
                         </Row>
@@ -221,6 +237,24 @@ const MenuG = () => {
                     <>
                         <Row>
                             <Col md={12}>
+                                <Empleados />
+                            </Col>
+                        </Row>
+
+                    </>)}
+                    {currentPage === 'sucursal' && (
+                    <>
+                        <Row>
+                            <Col md={12}>
+                                <Sucursales />
+                            </Col>
+                        </Row>
+
+                    </>)}
+                    {currentPage != 'home' && (
+                    <>
+                        <Row>
+                            <Col md={12}>
                                 <Button
                                     variant="success"
                                     style={{ position: 'fixed', right: '16px', bottom: '16px', zIndex: 1000 }}
@@ -228,7 +262,6 @@ const MenuG = () => {
                                 >
                                     Atrás
                                 </Button>
-                                <Empleados />
                             </Col>
                         </Row>
 
