@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Input, message,Drawer } from 'antd';
+import { Table, Button, Modal, Form, Input, message, Drawer, Tooltip, Popconfirm } from 'antd';
 import { Row, Col } from 'react-bootstrap';
+import { EditTwoTone, DeleteFilled } from '@ant-design/icons';
 import CrearTipoProducto from './creartipoproducto'
 
 const EditarTipoProducto = () => {
@@ -10,6 +11,11 @@ const EditarTipoProducto = () => {
   const [tipoProductoId, setTipoProductoId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [opentp, setOpentp] = useState(false);
+  const [openetp, setOpenetp] = useState(false);
+
+  const onCloseetp = () => {
+    setOpenetp(false);
+  };
 
   const showDrawertp = () => {
     setOpentp(true);
@@ -17,7 +23,7 @@ const EditarTipoProducto = () => {
 
   const onClosetp = () => {
     setOpentp(false);
-};
+  };
 
 
   useEffect(() => {
@@ -43,18 +49,43 @@ const EditarTipoProducto = () => {
       title: 'Acciones',
       key: 'acciones',
       render: (text, record) => (
-        <Button type="link" onClick={() => handleEdit(record.id_tipoproducto)}>
-          Editar
-        </Button>
+        <Row>
+          <Col md={1}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Tooltip title='Editar tipo de producto'>
+                <Button
+                  type="link"
+                  style={{ fontSize: '24px', marginLeft: 'auto' }}
+                  icon={<EditTwoTone style={{ fontSize: '30px', color: '#eb2f96', marginLeft: '5%', border: '1px solid #268A2E' }} />}
+                  onClick={() => handleEdit(record.id_tipoproducto)}
+                />
+              </Tooltip>
+              <Popconfirm
+                title="Eliminar tipo de producto"
+                description="¿Estas seguro que que deseas eliminar el tipo de producto?"
+                onConfirm={'confirm'}
+                onCancel={'cancel'}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button
+                  type="link"
+                  style={{ fontSize: '24px', marginLeft: 'auto' }}
+                  icon={<DeleteFilled style={{ fontSize: '30px', marginLeft: '2%', border: '1px solid red', color: 'red' }} />}
+                />
+              </Popconfirm>
+            </div>
+          </Col>
+        </Row>
+
       ),
     },
   ];
 
   const handleEdit = (id) => {
-    setTipoProductoId(id);
-    setModalVisible(true);
 
-    // Obtener los detalles del tipo de producto seleccionado
+    setTipoProductoId(id);
+    setOpenetp(true);
     const tipoProductoSeleccionado = data.find(tipo => tipo.id_tipoproducto === id);
 
     // Establecer los valores iniciales en el formulario
@@ -64,17 +95,16 @@ const EditarTipoProducto = () => {
     });
   };
 
-  const handleModalCancel = () => {
-    setModalVisible(false);
-  };
-
   const onFinish = async (values) => {
     setLoading(true);
 
     try {
       const formData = new FormData();
       formData.append('tpnombre', values.name);
-      formData.append('descripcion', values.description);
+      if(values.description){
+        formData.append('descripcion', values.description);
+      }
+      
 
       const response = await fetch(`http://127.0.0.1:8000/producto/editar_tipo_producto/${tipoProductoId}/`, {
         method: 'POST',
@@ -114,12 +144,29 @@ const EditarTipoProducto = () => {
           <Table dataSource={data} columns={columns} rowKey="id_tipoproducto" />
         </Col>
       </Row>
-
-      <Modal
-        title="Editar Tipo de Producto"
-        open={modalVisible}
-        onCancel={handleModalCancel}
-        footer={null}
+      <Drawer
+        title="Crear tipo de producto"
+        width={720}
+        onClose={onClosetp}
+        open={opentp}
+        styles={{
+          body: {
+            paddingBottom: 80,
+          },
+        }}
+      >
+        <CrearTipoProducto />
+      </Drawer>
+      <Drawer
+        title="Editar tipo de producto"
+        width={720}
+        onClose={onCloseetp}
+        open={openetp}
+        styles={{
+          body: {
+            paddingBottom: 80,
+          },
+        }}
       >
         <Form
           form={form}
@@ -168,19 +215,6 @@ const EditarTipoProducto = () => {
             </Button>
           </Form.Item>
         </Form>
-      </Modal>
-      <Drawer
-        title="Crear tipo de producto"
-        width={720}
-        onClose={onClosetp}
-        open={opentp}
-        styles={{
-          body: {
-            paddingBottom: 80,
-          },
-        }}
-      >
-        <CrearTipoProducto />
       </Drawer>
     </div>
   );
