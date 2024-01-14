@@ -31,6 +31,8 @@ const CrearCategoria = () => {
     setModalVisible(false);
   };
 
+  
+
   useEffect(() => {
     fetch('http://127.0.0.1:8000/producto/listatiposycategorias/')
       .then(response => response.json())
@@ -61,7 +63,9 @@ const CrearCategoria = () => {
       const formData = new FormData();
       formData.append('id_tipoproducto', values.idTipoProducto);
       formData.append('catnombre', values.catNombre);
-      formData.append('descripcion', values.descripcion);
+      if(values.descripcion){
+        formData.append('descripcion', values.descripcion);
+      }
       formData.append('imagencategoria', imagenCategoria);
 
       const response = await fetch('http://127.0.0.1:8000/producto/crearcategoria/', {
@@ -93,7 +97,6 @@ const CrearCategoria = () => {
 
   return (
     <div>
-      <h1>Crear Categoría</h1>
       <Form form={form} onFinish={handleSubmit} onFinishFailed={onFinishFailed} layout="vertical">
         <Form.Item
           label="Tipo de Producto"

@@ -9,9 +9,10 @@ import tipoproducto from './res/tipoproducto.png'
 import um from './res/um.png'
 import CrearProducto from './CrearProducto';
 import EditarTipoProducto from './editartipoproducto'
+import EditarCategoria from './editarcategoria';
 
 const { Meta } = Card;
-const { Option } = Select; 
+const { Option } = Select;
 
 const EditarProducto = () => {
     const [productos, setProductos] = useState([]);
@@ -296,16 +297,16 @@ const EditarProducto = () => {
                     </>)}
                 {selectedOpcion === 'Categorias' && (
                     <>
-                    <Divider>Control categorías</Divider>
+                        <Divider>Control categorías</Divider>
                         <Col md={12}>
-
+                            <EditarCategoria />
                         </Col>
                     </>)}
                 {selectedOpcion === 'tipoproducto' && (
                     <>
-                    <Divider>Control tipo de productos</Divider>
+                        <Divider>Control tipo de productos</Divider>
                         <Col md={12}>
-                        <EditarTipoProducto/>
+                            <EditarTipoProducto />
                         </Col>
                     </>)}
                 {selectedOpcion === 'um' && (
