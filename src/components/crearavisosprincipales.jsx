@@ -17,7 +17,7 @@ const CrearAvisos = () => {
     formData.append('titulo', titulo);
     formData.append('descripcion', descripcion);
     formData.append('imagen', imagen.file);
-
+ 
     try {
       const response = await fetch('http://127.0.0.1:8000/avisos/crear/', {
         method: 'POST',

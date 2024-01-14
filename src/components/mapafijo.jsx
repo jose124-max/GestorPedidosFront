@@ -17,7 +17,7 @@ const Mapafijo = ({ latitud, longitud,idm }) => {
     const currentLng = longitud || defaultLng;
 
     if (!mapRef.current) {
-        
+         
         console.log('El mapa será: '+idm)
         const newMap = L.map('map' + idm, {
             center: [currentLat, currentLng],

@@ -21,7 +21,7 @@ const LocationPicker = ({ onLocationSelect }) => {
     const newMarker = {
       id: new Date().getTime(),
       position: [e.latlng.lat, e.latlng.lng],
-    };
+    }; 
   
     setMarcador(newMarker);
     onLocationSelect && onLocationSelect(newMarker.position);

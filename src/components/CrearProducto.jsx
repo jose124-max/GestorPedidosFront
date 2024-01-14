@@ -195,7 +195,7 @@ const CrearProducto = () => {
       <Form.Item name="irbpnr" label="IRBPNR" valuePropName="checked">
         <Checkbox />
       </Form.Item>
-
+ 
       <Form.Item label="Imagen" name="imagen_p" valuePropName="fileList" getValueFromEvent={normFile}>
         <Upload
           accept="image/*"

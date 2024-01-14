@@ -201,7 +201,7 @@ const Sucursales = () => {
                             status="404"
                             title="Vacío"
                             subTitle="No tienes sucursales creadas."
-
+ 
                         />
                     }
                 </div >

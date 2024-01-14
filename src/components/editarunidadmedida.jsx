@@ -13,7 +13,7 @@ const EditarUnidadesMedida = () => {
       setUnidadesMedida(data.unidades_medida);
     } catch (error) {
       console.error('Error al obtener la lista de unidades de medida:', error);
-    }
+    } 
   };
 
   const openEditModal = (unidad) => {

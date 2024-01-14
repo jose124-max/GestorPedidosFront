@@ -14,7 +14,7 @@ const RegistroForm = () => {
             content: errorMessage,
         });
     };
-
+ 
 
     const toggleOptionalFields = () => {
         setShowOptionalFields(!showOptionalFields);

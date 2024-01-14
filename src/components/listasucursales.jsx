@@ -35,7 +35,7 @@ const ListSucursales = () => {
         fetchData();
         message.success('Actualizando...');
     };
-
+ 
     const handleSwitchChange = (checked, record) => {
         const formData = new FormData();
         formData.append('id_sucursal', record.id_sucursal);

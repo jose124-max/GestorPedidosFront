@@ -19,7 +19,7 @@ const Map = () => {
       }
     );
   };
-
+ 
   const handleCancel = () => {
     setMarker(null);
   };

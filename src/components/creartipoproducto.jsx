@@ -11,7 +11,7 @@ const CrearTipoProducto = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-        },
+        }, 
         body: JSON.stringify({
           tp_nombre: values.productName,
           descripcion: values.productDescription,

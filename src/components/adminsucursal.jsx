@@ -682,7 +682,7 @@ const AdminSucursal = ({ idsucursalx }) => {
                     <Col md={12}>
                         <Segmented
                             options={[
-                                {
+                                { 
                                     label: (
                                         <Tooltip title="Administradores">
                                             <div style={{ padding: 4 }}>

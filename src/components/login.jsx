@@ -38,7 +38,7 @@ const LoginForm = ({ onLogin }) => {
         console.error('Error en la solicitud:', error);
       }
     };
-
+ 
     // Llamar a la función fetchData al cargar el componente
     fetchData();
   }, []);

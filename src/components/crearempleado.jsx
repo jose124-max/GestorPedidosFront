@@ -16,7 +16,7 @@ const CrearEmpleadoForm = ({ }) => {
         setSucursales(data.sucursales);
       } catch (error) {
         console.error('Error al obtener la lista de sucursales:', error);
-      }
+      } 
     };
 
     fetchSucursales();

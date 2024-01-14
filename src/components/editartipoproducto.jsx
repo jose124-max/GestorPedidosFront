@@ -73,7 +73,7 @@ const EditarTipoProducto = () => {
                   style={{ fontSize: '24px', marginLeft: 'auto' }}
                   icon={<DeleteFilled style={{ fontSize: '30px', marginLeft: '2%', border: '1px solid red', color: 'red' }} />}
                 />
-              </Popconfirm>
+              </Popconfirm> 
             </div>
           </Col>
         </Row>
