@@ -157,7 +157,7 @@ const EditarEmpleado = ({ idsucur, oficio }) => {
                                 </Col>
                             ))}
                         </Row>
-                    </Card> 
+                    </Card>
                 )
             ))}
             <Drawer

@@ -37,6 +37,7 @@ const CrearEmpleadoForm = () => {
       if (response.ok) {
         message.success('Empleado creado exitosamente');
         form.resetFields(); // Limpiar el formulario
+        onClose();
       } else {
         console.error('Error al crear empleado:', data.error || 'Hubo un error al realizar la solicitud');
       }

@@ -18,20 +18,26 @@ const Empleados = ({ }) => {
     const [sucursales, setSucursales] = useState([]);
     const [loadingSucursales, setLoadingSucursales] = useState(true);
     const [opene, setOpene] = useState(false);
+    const [empleados, setEmpleados] = useState({});
 
     const onClosee = () => {
         setSelectedOficio('Administradores');
+        setSelectedSucursal(0);
         setOpene(false);
+        fetchData();
     };
+
     const showDrawere = () => {
         setOpene(true);
+        setSelectedSucursal(0);
     };
+
 
     useEffect(() => {
         fetch('http://127.0.0.1:8000/sucursal/sucusarleslist/')
             .then((response) => response.json())
             .then((data) => {
-                setSucursales(data.sucursales);  // Utilizar data.sucursales en lugar de data
+                setSucursales(data.sucursales);
             })
 
             .catch((error) => {
@@ -51,8 +57,24 @@ const Empleados = ({ }) => {
     };
 
     const handleSucursalChange = (value) => {
+        console.log('ID de la sucursal seleccionada:', value);
+
         setSelectedSucursal(value);
+
+        if (value !== 'Todas las sucursales') {
+            fetch(`http://127.0.0.1:8000/empleado/listar-empleados/${encodeURIComponent(value)}/`)
+                .then((response) => response.json())
+                .then((data) => {
+                    setEmpleados(data.empleados);
+                })
+                .catch((error) => {
+                    console.error('Error fetching empleados:', error);
+                });
+        } else {
+            setEmpleados({});
+        }
     };
+
 
     return (
         <>
@@ -127,20 +149,23 @@ const Empleados = ({ }) => {
                         loading={loadingSucursales}
                     >
                         {/* Opción para "Todas las sucursales" */}
-                        <Option key="todas" value="Todas las sucursales">
+                        <Option key="todas" value={0}>
                             Todas las sucursales
                         </Option>
+
                         {sucursales.map((sucursal) => (
-                            <Option key={sucursal.id_sucursal} value={sucursal.snombre}>
+                            <Option key={sucursal.id_sucursal} value={sucursal.id_sucursal}>
                                 {sucursal.snombre}
                             </Option>
                         ))}
+
                     </Select>
                 </Col>
                 <Col md={12}>
                     {console.log('Esto es : ' + selectedOficio)}
-                    <EditarEmpleado oficio={selectedOficio} sucursal={selectedSucursal} />
+                    <EditarEmpleado oficio={selectedOficio} idsucur={selectedSucursal} empleados={empleados[selectedOficio]} />
                 </Col>
+
             </Row>
             <Drawer
                 title="Crear empleado"
