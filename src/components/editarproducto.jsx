@@ -339,7 +339,6 @@ const EditarProducto = () => {
     };
 
     const showModalContent = (producto) => {
-
         return (
             <Form form={form} onFinish={(values) => handleSaveEdit(producto.id_producto, values)}>
                 <Form.Item label="Nombre del Producto" name="nombreproducto" initialValue={producto.nombreproducto}>
@@ -462,7 +461,6 @@ const EditarProducto = () => {
                         </Col>
                         <Col md={12}>
                             <Row>
-
                                 {productos.map((producto) => (
                                     <Col xs={24} sm={12} md={3} lg={3}>
                                         <Card
@@ -536,8 +534,6 @@ const EditarProducto = () => {
                                                         </Row>
                                                     </>
                                                 )
-
-
                                             }
 
                                         >
@@ -554,7 +550,6 @@ const EditarProducto = () => {
                                         </Card>
                                     </Col>
                                 ))}
-
                             </Row>
                             <Pagination current={currentPage} total={total} onChange={handlePageChange} pageSize={8} style={{ marginTop: '16px', textAlign: 'center' }} />
                         </Col>
@@ -626,6 +621,7 @@ const EditarProducto = () => {
                 </Row>
                 {selectedSucursal != '' && horarioDetails != '' && (
                     <>
+<<<<<<< HEAD
                         <CrearHorariosSemanales detalles={horarioDetails} onHorarioCreate={editHorarioCreate} />
 
 
@@ -636,13 +632,11 @@ const EditarProducto = () => {
                         <CrearHorariosSemanales onHorarioCreate={handleHorarioCreate} />
 
 
+=======
+                        <CrearHorariosSemanales  />
+>>>>>>> 1ac5362dc402d53467b704117dd1b9821ca1c140
                     </>
                 )}
-
-
-
-
-
             </Drawer>
         </div>
     );
