@@ -190,9 +190,11 @@ const EditarProducto = () => {
                 <Form.Item label="IRBPNR" name="irbpnr" valuePropName="checked" initialValue={producto.irbpnr === '1'}>
                     <Checkbox />
                 </Form.Item>
+
                 <Form.Item label="Puntos" name="puntosp" initialValue={producto.puntosp}>
-                    <Input />
+                        <Input />
                 </Form.Item>
+
                 <Form.Item
                     label="Imagen del Producto"
                     name="imagenp"
@@ -275,23 +277,33 @@ const EditarProducto = () => {
                         </Col>
                         <Col md={12}>
                             <Row>
-                                <Col md={3}>
+                                
                                     {productos.map((producto) => (
+                                        <Col xs={24} sm={12} md={3} lg={3}>
                                         <Card
                                             key={producto.id_producto}
                                             hoverable
-                                            style={{ width: 240, margin: '16px' }}
+                                            style={{
+                                                width: '100%', backgroundColor: '#CAF0EF', border: '1px solid #A4A4A4', marginTop: '5%',
+                                                height: '92%', margin: '16px', marginLeft: '1px',
+                                            }}
                                             cover={<img alt={producto.nombreproducto} src={`data:image/png;base64,${producto.imagenp}`} />}
                                             onClick={() => handleEditClick(producto.id_producto)}
                                         >
                                             <Meta title={producto.nombreproducto} description={producto.descripcionproducto} />
+                                            <Tooltip title={"Puntos de "+producto.nombreproducto}>
                                             <Badge count={producto.puntosp} showZero color='#faad14' />
+                                            </Tooltip>
+                                            <Tooltip title={"Precio de "+producto.nombreproducto}>
                                             <Badge count={'$' + producto.preciounitario} showZero color='#06CE15' style={{ margin: '10px' }} />
+                                            </Tooltip>
+                                            <Tooltip title={"Categoría de "+producto.nombreproducto}>
                                             <Badge count={getCategoriaNombre(producto.id_categoria)} showZero color='#CE6F04' />
-
+                                            </Tooltip>
                                         </Card>
+                                        </Col>
                                     ))}
-                                </Col>
+                                
                             </Row>
                             <Pagination current={currentPage} total={total} onChange={handlePageChange} pageSize={8} style={{ marginTop: '16px', textAlign: 'center' }} />
                         </Col>
@@ -312,7 +324,7 @@ const EditarProducto = () => {
                     </>)}
                 {selectedOpcion === 'um' && (
                     <>
-                    <Divider>Control unidad de media</Divider>
+                        <Divider>Control unidad de media</Divider>
                         <Col md={12}>
                             <EditarUnidadesMedida />
                         </Col>

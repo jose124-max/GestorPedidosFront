@@ -50,7 +50,7 @@ const EditarTipoProducto = () => {
     }
   }
 
-  const listarp= async ()=>{
+  const listarp= ()=>{
     try {
       fetch('http://127.0.0.1:8000/producto/listarproductos/')
       .then(response => response.json())
@@ -65,6 +65,7 @@ const EditarTipoProducto = () => {
 
 
   useEffect(() => {
+    console.log('SD');
     listarp();
   }, []);
 
