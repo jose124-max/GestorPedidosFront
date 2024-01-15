@@ -9,6 +9,7 @@ const CrearProducto = () => {
   const [unidadesMedida, setUnidadesMedida] = useState([]);
   const [fileList, setFileList] = useState([]);
   const [imagenP, setimagenP] = useState(null);
+  
 
   useEffect(() => {
     const fetchCategorias = async () => {
@@ -26,6 +27,8 @@ const CrearProducto = () => {
         message.error('Hubo un error al cargar las categorías');
       }
     };
+
+    
 
     const fetchUnidadesMedida = async () => {
       try {
@@ -158,41 +161,41 @@ const CrearProducto = () => {
       </Form.Item>
 
       <Form.Item
-  name="precio_unitario"
-  label="Precio Unitario"
-  rules={[
-    { required: true, message: 'Por favor ingrese el precio unitario' },
-    {
-      pattern: /^(?:\d+)?(?:\.\d{1,2})?$/,
-      message: 'El precio unitario debe ser un número válido con hasta 2 decimales',
-    },
-  ]}
->
-  <Input type="text" min={0} />
-</Form.Item>
+        name="precio_unitario"
+        label="Precio Unitario"
+        rules={[
+          { required: true, message: 'Por favor ingrese el precio unitario' },
+          {
+            pattern: /^(?:\d+)?(?:\.\d{1,2})?$/,
+            message: 'El precio unitario debe ser un número válido con hasta 2 decimales',
+          },
+        ]}
+      >
+        <Input type="text" min={0} />
+      </Form.Item>
 
       <Form.Item
-  name="puntos_p"
-  label="Puntos del Producto"
-  rules={[
-    { required: true, message: 'Por favor ingrese los puntos del producto' },
-    {
-      type: 'number',
-      transform: value => parseFloat(value),
-      validator: (rule, value) => {
-        if (isNaN(value) || value < 0) {
-          return Promise.reject('Los puntos del producto no pueden ser negativos');
-        }
-        if (value.toString().length > 3) {
-          return Promise.reject('Los puntos del producto no pueden tener más de 3 dígitos');
-        }
-        return Promise.resolve();
-      },
-    },
-  ]}
->
-  <Input type="number" min={0} />
-</Form.Item>
+        name="puntos_p"
+        label="Puntos del Producto"
+        rules={[
+          { required: true, message: 'Por favor ingrese los puntos del producto' },
+          {
+            type: 'number',
+            transform: value => parseFloat(value),
+            validator: (rule, value) => {
+              if (isNaN(value) || value < 0) {
+                return Promise.reject('Los puntos del producto no pueden ser negativos');
+              }
+              if (value.toString().length > 3) {
+                return Promise.reject('Los puntos del producto no pueden tener más de 3 dígitos');
+              }
+              return Promise.resolve();
+            },
+          },
+        ]}
+      >
+        <Input type="number" min={0} />
+      </Form.Item>
 
       <Form.Item name="iva" label="IVA" valuePropName="checked">
         <Checkbox />
@@ -205,7 +208,7 @@ const CrearProducto = () => {
       <Form.Item name="irbpnr" label="IRBPNR" valuePropName="checked">
         <Checkbox />
       </Form.Item>
- 
+
       <Form.Item label="Imagen" name="imagen_p" valuePropName="fileList" getValueFromEvent={normFile}>
         <Upload
           accept="image/*"
