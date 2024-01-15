@@ -479,7 +479,6 @@ const EditarProducto = () => {
                 </Row>
                 {selectedSucursal!='' && (
                     <>
-
                         <CrearHorariosSemanales  />
                     </>
                 )}

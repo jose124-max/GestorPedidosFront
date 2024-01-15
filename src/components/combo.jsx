@@ -3,6 +3,8 @@ import { Form, Card, Input, Pagination, Button, Select, Modal, Upload, Tooltip, 
 import { Row, Col } from 'react-bootstrap';
 import imgcombos from './res/imgcombos.png';
 import NuevoComboForm from './crearcombo';
+import categoriaproducto from './res/categoriaproducto.png';
+import EditarCategoriaCombo from './editarcategoriacombo';
 
 const { Meta } = Card;
 const { Option } = Select;
@@ -65,8 +67,20 @@ const Combos = () => {
                                     </Tooltip>
                                 ),
                                 value: 'Combos',
+                            },
+                            {
+                                label: (
+                                    <Tooltip title="Categorías de combos">
+                                        <div style={{ padding: 4 }}>
+                                            <Avatar shape="square" size="large" src={categoriaproducto} />
+                                        </div>
+                                    </Tooltip>
+                                ),
+                                value: 'Categorias',
                             }
                         ]}
+                        value={selectedOpcion}
+                        onChange={Changueopcion}
                     />
                 </Col>
                 {selectedOpcion === 'Combos' && (
@@ -131,6 +145,13 @@ const Combos = () => {
                                 ))}
                             </Row>
                             <Pagination current={currentPage} total={total} onChange={handlePageChange} pageSize={8} style={{ marginTop: '16px', textAlign: 'center' }} />
+                        </Col>
+                    </>)}
+                {selectedOpcion === 'Categorias' && (
+                    <>
+                        <Divider>Control categorías de combo</Divider>
+                        <Col md={12}>
+                            <EditarCategoriaCombo />
                         </Col>
                     </>)}
             </Row>
