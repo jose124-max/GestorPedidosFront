@@ -10,6 +10,7 @@ import um from './res/um.png'
 import CrearProducto from './CrearProducto';
 import EditarTipoProducto from './editartipoproducto'
 import EditarCategoria from './editarcategoria';
+import EditarUnidadesMedida from './editarunidadmedida';
 
 const { Meta } = Card;
 const { Option } = Select;
@@ -311,8 +312,9 @@ const EditarProducto = () => {
                     </>)}
                 {selectedOpcion === 'um' && (
                     <>
+                    <Divider>Control unidad de media</Divider>
                         <Col md={12}>
-
+                            <EditarUnidadesMedida />
                         </Col>
                     </>)}
             </Row>

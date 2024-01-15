@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Space, Image, Button, Form, Input, Select, Modal, Upload, Drawer, Popconfirm, Tooltip,message  } from 'antd';
+import { Table, Space, Image, Button, Form, Input, Select, Modal, Upload, Drawer, Popconfirm, Tooltip, message } from 'antd';
 import { UploadOutlined, EditTwoTone, DeleteFilled } from '@ant-design/icons';
 import { Row, Col } from 'react-bootstrap';
 import CrearCategoria from './crearcategoria';
@@ -12,7 +12,7 @@ const EditarCategoria = ({ onCancel }) => {
   const [openca, setOpenca] = useState(false);
   const [form] = Form.useForm();
 
-  
+
 
 
   const showDrawerc = () => {
@@ -43,7 +43,7 @@ const EditarCategoria = ({ onCancel }) => {
     }
   };
 
-  const eliminartp= async (idca)=>{
+  const eliminartp = async (idca) => {
     try {
       const formData = new FormData();
       console.log('El valor enviado es :' + idca)
@@ -61,7 +61,7 @@ const EditarCategoria = ({ onCancel }) => {
       }
     } catch (error) {
       message.error('Hubo un error al realizar la solicitud');
-    } 
+    }
   }
 
 
@@ -69,7 +69,7 @@ const EditarCategoria = ({ onCancel }) => {
     listarca();
   }, []);
 
-  const listarca = () =>{
+  const listarca = () => {
     const fetchTiposProductos = async () => {
       console.log('Que pasae');
       try {
@@ -154,7 +154,7 @@ const EditarCategoria = ({ onCancel }) => {
   const CategoriaForm = ({ onFinish, onCancel, initialValues, tiposProductos }) => {
     const [form] = Form.useForm();
 
-    
+
 
 
   };
@@ -245,20 +245,20 @@ const EditarCategoria = ({ onCancel }) => {
         }}
       >
         <CrearCategoria />
-          
+
       </Drawer>
       {selectedCategoria && (
-          <Drawer
-        title="Editar categoria"
-        width={720}
-        open={openca}
-        onClose={onCloseca}
-        styles={{
-          body: {
-            paddingBottom: 80,
-          },
-        }}
-      >
+        <Drawer
+          title="Editar categoria"
+          width={720}
+          open={openca}
+          onClose={onCloseca}
+          styles={{
+            body: {
+              paddingBottom: 80,
+            },
+          }}
+        >
 
 
 
@@ -324,7 +324,7 @@ const EditarCategoria = ({ onCancel }) => {
             </Form.Item>
           </Form>
 
-          </Drawer>
+        </Drawer>
 
       )}
     </>
