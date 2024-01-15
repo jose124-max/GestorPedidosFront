@@ -317,9 +317,9 @@ const EditarProducto = () => {
                         </Col>
                         <Col md={12}>
                             <Row>
-
-                                {productos.map((producto) => (
-                                    <Col xs={24} sm={12} md={3} lg={3}>
+                                
+                                    {productos.map((producto) => (
+                                        <Col xs={24} sm={12} md={3} lg={3}>
                                         <Card
                                             key={producto.id_producto}
                                             hoverable
@@ -407,9 +407,9 @@ const EditarProducto = () => {
                                                 <Badge count={getCategoriaNombre(producto.id_categoria)} showZero color='#CE6F04' />
                                             </Tooltip>
                                         </Card>
-                                    </Col>
-                                ))}
-
+                                        </Col>
+                                    ))}
+                                
                             </Row>
                             <Pagination current={currentPage} total={total} onChange={handlePageChange} pageSize={8} style={{ marginTop: '16px', textAlign: 'center' }} />
                         </Col>
