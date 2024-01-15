@@ -14,7 +14,7 @@ import Empleados from './empleados.jsx';
 import Sucursales from './sucursales.jsx';
 import subsidiario from './res/subsidiario.png'
 import EditarProducto from './editarproducto.jsx';
-
+import Combos from './combo.jsx';
 
 const MenuG = () => {
     const { Meta } = Card;
@@ -138,6 +138,7 @@ const MenuG = () => {
                                                 preview={false}
                                             />}
                                         className="text-center"
+                                        onClick={() => handleCardClick('combos')}
                                     >
                                         <Meta title={tooltipTitle6}></Meta>
                                     </Card>
@@ -275,6 +276,16 @@ const MenuG = () => {
                         <Row>
                             <Col md={12}>
                                 <EditarProducto/>
+                            </Col>
+                        </Row>
+
+                    </>)}
+                    {currentPage == 'combos' && (
+                    <>
+                    <Divider>Combos</Divider>
+                        <Row>
+                            <Col md={12}>
+                                <Combos/>
                             </Col>
                         </Row>
 

@@ -277,7 +277,6 @@ const EditarProducto = () => {
                         </Col>
                         <Col md={12}>
                             <Row>
-                                
                                     {productos.map((producto) => (
                                         <Col xs={24} sm={12} md={3} lg={3}>
                                         <Card
@@ -303,7 +302,6 @@ const EditarProducto = () => {
                                         </Card>
                                         </Col>
                                     ))}
-                                
                             </Row>
                             <Pagination current={currentPage} total={total} onChange={handlePageChange} pageSize={8} style={{ marginTop: '16px', textAlign: 'center' }} />
                         </Col>
