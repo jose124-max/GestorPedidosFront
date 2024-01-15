@@ -196,7 +196,6 @@ const EditarProducto = () => {
     };
 
     const showModalContent = (producto) => {
-
         return (
             <Form form={form} onFinish={(values) => handleSaveEdit(producto.id_producto, values)}>
                 <Form.Item label="Nombre del Producto" name="nombreproducto" initialValue={producto.nombreproducto}>
@@ -319,7 +318,6 @@ const EditarProducto = () => {
                         </Col>
                         <Col md={12}>
                             <Row>
-
                                 {productos.map((producto) => (
                                     <Col xs={24} sm={12} md={3} lg={3}>
                                         <Card
@@ -393,8 +391,6 @@ const EditarProducto = () => {
                                                         </Row>
                                                     </>
                                                 )
-
-
                                             }
 
                                         >
@@ -411,7 +407,6 @@ const EditarProducto = () => {
                                         </Card>
                                     </Col>
                                 ))}
-
                             </Row>
                             <Pagination current={currentPage} total={total} onChange={handlePageChange} pageSize={8} style={{ marginTop: '16px', textAlign: 'center' }} />
                         </Col>
@@ -488,11 +483,6 @@ const EditarProducto = () => {
                         <CrearHorariosSemanales  />
                     </>
                 )}
-
-
-
-
-
             </Drawer>
         </div>
     );

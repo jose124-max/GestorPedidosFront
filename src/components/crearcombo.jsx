@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Row, Col, Card, Upload, Image, Modal, message, Pagination } from 'antd';
+import { Form, Input, Button, Select, Row, Col, Card, Upload, Image, Modal, message, Pagination, notification } from 'antd';
 import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
 
 import './nuevoComboForm.css';
@@ -113,48 +113,58 @@ const NuevoComboForm = () => {
     const onFinishProductos = async () => {
         try {
             const isValid = await comboForm.validateFields();
-
-
+    
             const formData = new FormData();
-
+    
             console.log("veamos que pasa: " + comboForm.getFieldValue('nombrecb'));
-
+    
             formData.append('id_cat_combo', categoriaSeleccionada);
             formData.append('descripcion_combo', comboForm.getFieldValue('descripcion_combo'));
             formData.append('nombre_cb', comboForm.getFieldValue('nombrecb'));
             formData.append('puntos_cb', comboForm.getFieldValue('puntoscb'));
             formData.append('precio_unitario', comboForm.getFieldValue('precio_unitario'));
             formData.append('imagen_c', comboFileList.length > 0 ? comboFileList[0].originFileObj : null);
-
+    
             const detalleCombo = selectedProducts.map((product) => ({
                 id_producto: product.id_producto,
                 cantidad: categoriaCombo.getFieldValue(`quantity_${product.id_producto}`),
             }));
-
+    
             formData.append('detalle_combo', JSON.stringify(detalleCombo));
-
+    
             const response = await fetch('http://127.0.0.1:8000/combos/crearcombo/', {
                 method: 'POST',
                 body: formData,
             });
-
+    
             if (response.ok) {
                 const data = await response.json();
                 console.log('Respuesta del servidor:', data);
-                message.success('Combo creado con éxito');
+    
+                notification.success({
+                    message: 'Éxito',
+                    description: 'Combo creado con éxito',
+                });
+    
                 comboForm.resetFields();
                 setComboFileList([]);
                 setSelectedProducts([]);
-                // Puedes hacer alguna acción adicional si es necesario
-
             } else {
                 const data = await response.json();
                 console.error('Error en la respuesta del servidor:', data);
-                message.error('Error al crear el combo');
+    
+                notification.error({
+                    message: 'Error',
+                    description: 'Error al crear el combo',
+                });
             }
         } catch (error) {
             console.error('Error en la petición:', error);
-            message.error('Error, algo salió mal');
+    
+            notification.error({
+                message: 'Error',
+                description: 'Error, algo salió mal',
+            });
         }
     };
 
@@ -167,38 +177,48 @@ const NuevoComboForm = () => {
     };
     const onFinishCategoria = async (values) => {
         try {
-
             const formData = new FormData();
             formData.append('cat_nombre', values.catnombre);
             formData.append('descripcion', values.descripcion);
-
+    
             if (values.imagencategoria && values.imagencategoria.length > 0) {
                 formData.append('imagencategoria', values.imagencategoria[0].originFileObj);
             }
-
+    
             const response = await fetch('http://127.0.0.1:8000/combos/crearcat/', {
                 method: 'POST',
                 body: formData,
             });
-
+    
             if (response.ok) {
                 const data = await response.json();
                 console.log('Respuesta del servidor:', data);
-                message.success('Categoría de combo creada con éxito');
+    
+                notification.success({
+                    message: 'Éxito',
+                    description: 'Categoría de combo creada con éxito',
+                });
+    
                 categoriaCombo.resetFields();
                 setCategoryFileList([]);
                 fetchCategorias();
-
             } else {
                 const data = await response.json();
                 console.error('Error en la respuesta del servidor:', data);
-                message.error('Error al crear la categoría de combo');
+    
+                notification.error({
+                    message: 'Error',
+                    description: 'Error al crear la categoría de combo',
+                });
             }
         } catch (error) {
             console.error('Error en la petición:', error);
-            message.error('Error al conectar con el servidor');
+    
+            notification.error({
+                message: 'Error de conexión',
+                description: 'Error al conectar con el servidor',
+            });
         }
-
     };
     const handleSelectProduct = (product) => {
         const isProductSelected = selectedProducts.some((selectedProduct) => selectedProduct.id_producto === product.id_producto);
@@ -273,7 +293,6 @@ const NuevoComboForm = () => {
                 >
                     <TextArea />
                 </Form.Item>
-
                 <Form.Item
                     name="id_catcombo"
                     label="Categoría del Combo"
@@ -516,8 +535,6 @@ const NuevoComboForm = () => {
                     </Form.Item>
                 </Form>
             </Modal>
-
-
         </div>
     );
 };

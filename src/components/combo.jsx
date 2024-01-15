@@ -12,6 +12,9 @@ const Combos = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedOpcion, setSelectedOpcion] = useState('Combos');
     const [total, setTotal] = useState(0);
+    const [combos, setCombos] = useState([]);
+    const [editModalVisible, setEditModalVisible] = useState(false);
+    const [form] = Form.useForm();
 
     const Changueopcion = (value) => {
         setSelectedOpcion(value);
@@ -29,6 +32,23 @@ const Combos = () => {
         setCurrentPage(page);
     };
 
+    useEffect(() => {
+        form.resetFields();
+        if (!editModalVisible) {
+            fetchData(currentPage);
+        }
+    }, [combos]);
+
+    const fetchData = async (page) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/combos/ver_combos/?page=${page}`);
+            const data = await response.json();
+            setCombos(data.combo);
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
 
     return (
         <div>
@@ -59,7 +79,56 @@ const Combos = () => {
                         </Col>
                         <Col md={12}>
                             <Row>
+                                {combos && combos.map((combo) => (
+                                    <Col xs={24} sm={12} md={3} lg={3}>
+                                        <Card
+                                            key={combo.id_combo}
+                                            hoverable
+                                            style={{
+                                                width: '100%', backgroundColor: '#CAF0EF', border: '1px solid #A4A4A4', marginTop: '5%',
+                                                height: '92%', margin: '16px', marginLeft: '1px',
+                                            }}
+                                            cover={
+                                                combo.imagen ? (
+                                                    <>
+                                                        <img alt={combo.nombrecb} src={`data:image/png;base64,${combos.imagen}`} height={'300px'} />
+                                                        <Row align="right">
+                                                            <Col md={8} />
+                                                            <Col md={4}>
+                                                                <Row align="right">
+                                                                    <Col md={5}>
+                                                                        <Tooltip title='Editar combo'>
 
+                                                                        </Tooltip>
+                                                                    </Col>
+                                                                </Row>
+                                                            </Col>
+                                                        </Row>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Watermark content={[combo.nombrecb, 'Sin imagen']}>
+                                                            <div style={{ width: '100%', height: '300px', overflow: 'hidden', backgroundColor: '#ffff', borderLeft: '1px solid  #A4A4A4', borderRight: ' 1px solid  #A4A4A4' }} />
+                                                        </Watermark>
+                                                        <Row align="right">
+                                                            <Col md={8} />
+                                                            <Col md={4}>
+                                                                <Row align="right">
+                                                                    <Col md={5}>
+                                                                        <Tooltip title='Editar combo'>
+
+                                                                        </Tooltip>
+                                                                    </Col>
+                                                                </Row>
+                                                            </Col>
+                                                        </Row>
+                                                    </>
+                                                )
+                                            }
+                                        >
+                                        </Card>
+                                    </Col>
+                                ))}
                             </Row>
                             <Pagination current={currentPage} total={total} onChange={handlePageChange} pageSize={8} style={{ marginTop: '16px', textAlign: 'center' }} />
                         </Col>
@@ -76,7 +145,7 @@ const Combos = () => {
                     },
                 }}
             >
-                < NuevoComboForm/>
+                < NuevoComboForm />
             </Drawer>
         </div>
     );
