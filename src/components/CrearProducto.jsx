@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Upload, message, Select, Checkbox } from 'antd';
+import { notification, Form, Input, Button, Upload, message, Select, Checkbox } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 
 const CrearProducto = () => {
@@ -44,10 +44,9 @@ const CrearProducto = () => {
     };
     fetchCategorias();
     fetchUnidadesMedida();
-  }, []); // Se ejecuta solo una vez al montar el componente
+  }, []);
 
   useEffect(() => {
-    // Este efecto se ejecuta cuando cambia el valor de 'imagen_p' en el formulario
     const imagenValue = form.getFieldValue('imagen_p');
     console.log(imagenValue);
     if (imagenValue) {
@@ -56,11 +55,11 @@ const CrearProducto = () => {
           uid: '-1',
           name: 'Imagen existente',
           status: 'done',
-          url: imagenValue, // Ajusta esto según la estructura de tus datos
+          url: imagenValue,
         },
       ]);
     }
-  }, [form.getFieldValue('imagen_p')]); // Se ejecuta cuando cambia 'imagen_p'
+  }, [form.getFieldValue('imagen_p')]);
 
   const onFinish = async (values) => {
     try {
@@ -85,19 +84,30 @@ const CrearProducto = () => {
 
       if (response.ok) {
         const data = await response.json();
-        message.success(data.mensaje);
+        notification.success({
+          message: 'Éxito',
+          description: data.mensaje,
+        });
         form.resetFields();
       } else {
         const errorData = await response.json();
-        message.error(errorData.error);
+        notification.error({
+          message: 'Error',
+          description: errorData.error,
+        });
       }
     } catch (error) {
       console.error('Error al crear el producto:', error);
-      message.error('Hubo un error al crear el producto');
+      notification.error({
+        message: 'Error',
+        description: 'Hubo un error al crear el producto',
+      });
     } finally {
       setLoading(false);
     }
   };
+
+
   const normFile = (e) => {
     if (Array.isArray(e)) {
       return e;

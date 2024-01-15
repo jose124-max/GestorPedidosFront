@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, message } from 'antd';
+import { Form, Input, Button, notification } from 'antd';
 
 const CrearUnidadMedida = () => {
   const [loading, setLoading] = useState(false);
@@ -18,16 +18,16 @@ const CrearUnidadMedida = () => {
       }); 
 
       if (response.ok) {
-        message.success('Unidad de medida creada con éxito');
         form.resetFields(); // Reset the form fields
+        openNotificationWithIcon('success', 'Unidad de medida creada con éxito');
       } else {
         const errorData = await response.json();
         console.error('Error al crear la unidad de medida:', errorData);
-        message.error('Error al crear la unidad de medida');
+        openNotificationWithIcon('error', 'Error al crear la unidad de medida');
       }
     } catch (error) {
       console.error('Error al crear la unidad de medida:', error);
-      message.error('Error al crear la unidad de medida');
+      openNotificationWithIcon('error', 'Error al crear la unidad de medida');
     } finally {
       setLoading(false);
     }
@@ -39,6 +39,12 @@ const CrearUnidadMedida = () => {
       e.preventDefault();
       e.stopPropagation();
     }
+  };
+
+  const openNotificationWithIcon = (type, message) => {
+    notification[type]({
+      message: message,
+    });
   };
 
   return (

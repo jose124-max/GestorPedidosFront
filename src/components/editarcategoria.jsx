@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Space, Image, Button, Form, Input, Select, Modal, Upload, Drawer, Popconfirm, Tooltip, message } from 'antd';
+import { Tag, Table, Space, Image, Button, Form, Input, Select, Modal, Upload, Drawer, Popconfirm, Tooltip, message } from 'antd';
 import { UploadOutlined, EditTwoTone, DeleteFilled } from '@ant-design/icons';
 import { Row, Col } from 'react-bootstrap';
 import CrearCategoria from './crearcategoria';
@@ -10,10 +10,8 @@ const EditarCategoria = ({ onCancel }) => {
   const [selectedCategoria, setSelectedCategoria] = useState(null);
   const [openc, setOpenc] = useState(false);
   const [openca, setOpenca] = useState(false);
+  const [searchText, setSearchText] = useState('');
   const [form] = Form.useForm();
-
-
-
 
   const showDrawerc = () => {
     console.log('Que pasaa');
@@ -32,14 +30,32 @@ const EditarCategoria = ({ onCancel }) => {
     fetchCategorias();
   };
 
+  const handleTipoProductoChange = (value) => {
+    setSelectedTipoProducto(value);
+  };
+
+
   const fetchCategorias = async () => {
-    console.log('Que pasad');
     try {
-      const response = await fetch('http://127.0.0.1:8000/producto/listar_categorias/');
-      const data = await response.json();
-      setCategorias(data.categorias);
+      const responseCategorias = await fetch('http://127.0.0.1:8000/producto/listar_categorias/');
+      const dataCategorias = await responseCategorias.json();
+
+      const responseTiposProductos = await fetch('http://127.0.0.1:8000/producto/listarproductos/');
+      const dataTiposProductos = await responseTiposProductos.json();
+
+      const tiposProductosMap = {};
+      dataTiposProductos.tipos_productos.forEach((tipoProducto) => {
+        tiposProductosMap[tipoProducto.id_tipoproducto] = tipoProducto;
+      });
+
+      const categoriasConTipos = dataCategorias.categorias.map((categoria) => ({
+        ...categoria,
+        tipoProducto: tiposProductosMap[categoria.id_tipoproducto.id_tipoproducto],
+      }));
+
+      setCategorias(categoriasConTipos);
     } catch (error) {
-      console.error('Error fetching categorias:', error);
+      console.error('Error fetching data:', error);
     }
   };
 
@@ -63,7 +79,6 @@ const EditarCategoria = ({ onCancel }) => {
       message.error('Hubo un error al realizar la solicitud');
     }
   }
-
 
   useEffect(() => {
     listarca();
@@ -153,10 +168,6 @@ const EditarCategoria = ({ onCancel }) => {
 
   const CategoriaForm = ({ onFinish, onCancel, initialValues, tiposProductos }) => {
     const [form] = Form.useForm();
-
-
-
-
   };
 
   const columns = [
@@ -170,13 +181,25 @@ const EditarCategoria = ({ onCancel }) => {
       dataIndex: 'imagencategoria',
       key: 'imagencategoria',
       render: (imagencategoria) => (
-        <Image src={`data:image/png;base64, ${imagencategoria}`} alt="Imagen de la categoría" width={50} />
+        imagencategoria ? (
+          <Image src={`data:image/png;base64, ${imagencategoria}`} alt="Imagen de la categoría" width={50} />
+        ) : (
+          <div style={{ textAlign: 'center', color: 'rgba(0, 0, 0, 0.45)' }}>Sin imagen</div>
+        )
       ),
     },
     {
       title: 'Descripción',
       dataIndex: 'descripcion',
       key: 'descripcion',
+    },
+    {
+      title: 'Tipo de Producto',
+      dataIndex: 'tipoProducto',
+      key: 'tipoProducto',
+      render: (tipoProducto) => (
+        <Tag color="blue">{tipoProducto ? tipoProducto.tpnombre : 'Sin Tipo'}</Tag>
+      ),
     },
     {
       title: 'Acciones',
@@ -214,6 +237,10 @@ const EditarCategoria = ({ onCancel }) => {
     },
   ];
 
+  const filteredCategorias = categorias.filter(categoria =>
+    categoria.catnombre.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   const selectedCategoriaWithValidTipo = {
     ...selectedCategoria,
     id_tipoproducto:
@@ -231,7 +258,20 @@ const EditarCategoria = ({ onCancel }) => {
             Crear nueva categoria
           </Button>
         </Col>
-        <Table dataSource={categorias} columns={columns} />
+      </Row>
+      <Row className="mb-2">
+        <Col md={12}>
+          <Input
+            placeholder="Buscar categoría"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col md={12}>
+          <Table dataSource={filteredCategorias} columns={columns} />
+        </Col>
       </Row>
       <Drawer
         title="Crear categoria"
@@ -245,7 +285,6 @@ const EditarCategoria = ({ onCancel }) => {
         }}
       >
         <CrearCategoria />
-
       </Drawer>
       {selectedCategoria && (
         <Drawer
@@ -259,9 +298,6 @@ const EditarCategoria = ({ onCancel }) => {
             },
           }}
         >
-
-
-
           <Form
             form={form}
             name="editarCategoriaForm"
@@ -323,13 +359,9 @@ const EditarCategoria = ({ onCancel }) => {
               </Button>
             </Form.Item>
           </Form>
-
         </Drawer>
-
       )}
     </>
   );
-
 };
-
 export default EditarCategoria;

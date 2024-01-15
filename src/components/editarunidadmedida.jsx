@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Space, Button, Form, Input, Modal, Drawer,Popconfirm, Tooltip,message } from 'antd';
+import { Table, Button, Modal, Form, Input, message, Drawer, Popconfirm, Tooltip } from 'antd';
 import { UploadOutlined, EditTwoTone, DeleteFilled } from '@ant-design/icons';
 import { Row, Col } from 'react-bootstrap';
 import CrearUnidadMedida from './CrearUM';
@@ -9,6 +9,7 @@ const EditarUnidadesMedida = () => {
   const [selectedUnidad, setSelectedUnidad] = useState(null);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [openum, setOpenum] = useState(false);
+  const [searchText, setSearchText] = useState('');
 
   const showDrawerUM = () => {
     setOpenum(true);
@@ -53,7 +54,7 @@ const EditarUnidadesMedida = () => {
       console.log('D');
 
       if (response.ok) {
-        message.success('Unidad de medida eliminada con exito');
+        message.success('Unidad de medida eliminada con éxito');
         fetchUnidadesMedida();
       } else {
         message.error(responseData.error || 'Hubo un error al realizar la solicitud');
@@ -61,7 +62,7 @@ const EditarUnidadesMedida = () => {
     } catch (error) {
       message.error('Hubo un error al realizar la solicitud');
     }
-  }
+  };
 
   const handleEdit = async (values) => {
     try {
@@ -121,16 +122,16 @@ const EditarUnidadesMedida = () => {
       render: (text, record) => (
         <>
           <Tooltip title='Editar unidad de medida'>
-                <Button
-                  type="link"
-                  style={{ fontSize: '24px', marginLeft: 'auto' }}
-                  icon={<EditTwoTone style={{ fontSize: '30px', color: '#eb2f96', marginLeft: '5%', border: '1px solid #268A2E' }} />}
-                  onClick={() => openEditModal(record)}
-                />
-              </Tooltip>
+            <Button
+              type="link"
+              style={{ fontSize: '24px', marginLeft: 'auto' }}
+              icon={<EditTwoTone style={{ fontSize: '30px', color: '#eb2f96', marginLeft: '5%', border: '1px solid #268A2E' }} />}
+              onClick={() => openEditModal(record)}
+            />
+          </Tooltip>
           <Popconfirm
             title="Eliminar unidad de medida"
-            description="¿Estas seguro que que deseas eliminar la unidad de medida?"
+            description="¿Estás seguro que deseas eliminar la unidad de medida?"
             onConfirm={() => eliminartp(record.id_um)}
             onCancel={'cancel'}
             okText="Yes"
@@ -147,19 +148,27 @@ const EditarUnidadesMedida = () => {
     },
   ];
 
+  const filteredUnidadesMedida = unidadesMedida.filter((um) =>
+    um.nombre_um.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   return (
     <div>
-      <Row>
+      <Row gutter={[16, 16]}>
         <Col md={12}>
           <Button type="primary" style={{ width: '100%', margin: '2%' }} onClick={showDrawerUM}>
             Crear unidad de medida
           </Button>
         </Col>
-        <Col>
-          <Table dataSource={unidadesMedida} columns={columns} />
+        <Col md={12}>
+          <Input
+            placeholder="Buscar unidad de medida"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
         </Col>
       </Row>
-
+      <Table dataSource={filteredUnidadesMedida} columns={columns} />
 
       <Modal
         title="Editar Unidad de Medida"
@@ -193,5 +202,4 @@ const EditarUnidadesMedida = () => {
     </div>
   );
 };
-
 export default EditarUnidadesMedida;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Input, message, Drawer, Tooltip, Popconfirm } from 'antd';
 import { Row, Col } from 'react-bootstrap';
 import { EditTwoTone, DeleteFilled } from '@ant-design/icons';
-import CrearTipoProducto from './creartipoproducto'
+import CrearTipoProducto from './creartipoproducto';
 
 const EditarTipoProducto = () => {
   const [form] = Form.useForm();
@@ -12,6 +12,7 @@ const EditarTipoProducto = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [opentp, setOpentp] = useState(false);
   const [openetp, setOpenetp] = useState(false);
+  const [searchText, setSearchText] = useState('');
 
   const onCloseetp = () => {
     setOpenetp(false);
@@ -26,10 +27,10 @@ const EditarTipoProducto = () => {
     setOpentp(false);
   };
 
-  const eliminartp= async (idtp)=>{
+  const eliminartp = async (idtp) => {
     try {
       const formData = new FormData();
-      console.log('El valor enviado es :' + idtp)
+      console.log('El valor enviado es :' + idtp);
       formData.append('sestado', '0');
       const response = await fetch(`http://127.0.0.1:8000/producto/editar_tipo_producto/${idtp}/`, {
         method: 'POST',
@@ -37,7 +38,7 @@ const EditarTipoProducto = () => {
       });
 
       if (response.ok) {
-        message.success('Sucursal eliminada con exito');
+        message.success('Sucursal eliminada con éxito');
         setModalVisible(false);
         listarp();
       } else {
@@ -48,21 +49,20 @@ const EditarTipoProducto = () => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  const listarp= async ()=>{
+  const listarp = async () => {
     try {
       fetch('http://127.0.0.1:8000/producto/listarproductos/')
-      .then(response => response.json())
-      .then(data => setTiposProductos(data.tipos_productos))
-      .catch(error => console.error('Error fetching tipos de productos:', error));
+        .then((response) => response.json())
+        .then((data) => setTiposProductos(data.tipos_productos))
+        .catch((error) => console.error('Error fetching tipos de productos:', error));
     } catch (error) {
       message.error('Hubo un error al realizar la solicitud');
     } finally {
       setLoading(false);
     }
-  }
-
+  };
 
   useEffect(() => {
     listarp();
@@ -96,8 +96,8 @@ const EditarTipoProducto = () => {
               </Tooltip>
               <Popconfirm
                 title="Eliminar tipo de producto"
-                description="¿Estas seguro que que deseas eliminar el tipo de producto?"
-                onConfirm={() =>eliminartp(record.id_tipoproducto)}
+                description="¿Estás seguro que deseas eliminar el tipo de producto?"
+                onConfirm={() => eliminartp(record.id_tipoproducto)}
                 onCancel={'cancel'}
                 okText="Yes"
                 cancelText="No"
@@ -107,20 +107,18 @@ const EditarTipoProducto = () => {
                   style={{ fontSize: '24px', marginLeft: 'auto' }}
                   icon={<DeleteFilled style={{ fontSize: '30px', marginLeft: '2%', border: '1px solid red', color: 'red' }} />}
                 />
-              </Popconfirm> 
+              </Popconfirm>
             </div>
           </Col>
         </Row>
-
       ),
     },
   ];
 
   const handleEdit = (id) => {
-
     setTipoProductoId(id);
     setOpenetp(true);
-    const tipoProductoSeleccionado = data.find(tipo => tipo.id_tipoproducto === id);
+    const tipoProductoSeleccionado = data.find((tipo) => tipo.id_tipoproducto === id);
 
     // Establecer los valores iniciales en el formulario
     form.setFieldsValue({
@@ -135,10 +133,9 @@ const EditarTipoProducto = () => {
     try {
       const formData = new FormData();
       formData.append('tpnombre', values.name);
-      if(values.description){
+      if (values.description) {
         formData.append('descripcion', values.description);
       }
-      
 
       const response = await fetch(`http://127.0.0.1:8000/producto/editar_tipo_producto/${tipoProductoId}/`, {
         method: 'POST',
@@ -161,6 +158,10 @@ const EditarTipoProducto = () => {
     }
   };
 
+  const filteredTiposProductos = data.filter((tipo) =>
+    tipo.tpnombre.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   return (
     <div>
       <Row>
@@ -170,14 +171,25 @@ const EditarTipoProducto = () => {
           </Button>
         </Col>
         <Col md={12}>
-          <Table dataSource={data} columns={columns} rowKey="id_tipoproducto" />
+          <Row gutter={[16, 16]}>
+            <Col md={12}>
+              <Input
+                placeholder="Buscar tipo de producto"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+            </Col>
+          </Row>
+        </Col>
+        <Col md={12}>
+          <Table dataSource={filteredTiposProductos} columns={columns} rowKey="id_tipoproducto" />
         </Col>
       </Row>
       <Drawer
         title="Crear tipo de producto"
         width={720}
-        onClose={onClosetp}
         open={opentp}
+        onClose={onClosetp}
         styles={{
           body: {
             paddingBottom: 80,

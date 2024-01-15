@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Select, Button, Upload, message, Modal } from 'antd';
+import { notification, Form, Input, Select, Button, Upload, message, Modal } from 'antd';
 import { CheckOutlined, UploadOutlined } from '@ant-design/icons';
 import CrearTipoProducto from '../components/creartipoproducto';
 
@@ -20,7 +20,7 @@ const CrearCategoria = () => {
   const showModal = () => {
     setModalVisible(true);
   };
- 
+
   const handleOk = () => {
     // Puedes realizar acciones adicionales aquí si es necesario
     setModalVisible(false);
@@ -31,7 +31,7 @@ const CrearCategoria = () => {
     setModalVisible(false);
   };
 
-  
+
 
   useEffect(() => {
     fetch('http://127.0.0.1:8000/producto/listatiposycategorias/')
@@ -59,11 +59,10 @@ const CrearCategoria = () => {
     setLoading(true);
     try {
       const values = await form.validateFields();
-
       const formData = new FormData();
       formData.append('id_tipoproducto', values.idTipoProducto);
       formData.append('catnombre', values.catNombre);
-      if(values.descripcion){
+      if (values.descripcion) {
         formData.append('descripcion', values.descripcion);
       }
       formData.append('imagencategoria', imagenCategoria);
@@ -76,16 +75,29 @@ const CrearCategoria = () => {
       const data = await response.json();
 
       if (response.ok) {
-        message.success('Categoría creada con éxito');
+        // Utilizando la notificación de Ant Design en lugar de message
+        notification.success({
+          message: 'Categoría creada con éxito',
+          // Puedes personalizar el contenido de la notificación según tus necesidades
+        });
+
         // Limpiar el formulario y la imagen después del éxito
         form.resetFields();
         setImagenCategoria(null);
         // Puedes realizar otras acciones después de un éxito, si es necesario
       } else {
-        message.error(data.error || 'Hubo un error al realizar la solicitud');
+        // Utilizando la notificación de Ant Design en lugar de message
+        notification.error({
+          message: data.error || 'Hubo un error al realizar la solicitud',
+          // Puedes personalizar el contenido de la notificación según tus necesidades
+        });
       }
     } catch (error) {
-      message.error('Hubo un error al realizar la solicitud');
+      // Utilizando la notificación de Ant Design en lugar de message
+      notification.error({
+        message: 'Hubo un error al realizar la solicitud',
+        // Puedes personalizar el contenido de la notificación según tus necesidades
+      });
     } finally {
       setLoading(false);
     }
