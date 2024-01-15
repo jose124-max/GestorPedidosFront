@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Card, Input, Pagination, Button, Select, Modal, Upload, Tooltip, Badge, Segmented, Avatar, Checkbox, Drawer, Divider, Watermark } from 'antd';
+import { Form, Card, Input, Pagination, Button, Select, Modal, Upload, Tooltip, Badge, Segmented, Avatar, Checkbox, notification, Drawer, Divider, Watermark, message } from 'antd';
 import { Row, Col } from 'react-bootstrap';
 import { UploadOutlined, CalendarTwoTone, EditFilled } from '@ant-design/icons';
 import imgproductos from './res/imgproductos.png';
@@ -32,9 +32,27 @@ const EditarProducto = () => {
     const [optionSucursales, setOptions] = useState([]);
     const [optionSucursales2, setOptions2] = useState([]);
     const [selectedSucursal, setSucursal] = useState([null]);
+    const [selectedProducto, setProducto] = useState([null]);
+    const [horarioDetails, setHorarioDetails] = useState([]);
     useEffect(() => {
         fetchSucursal();
     }, []);
+
+    const handleProductoChange = (value) => {
+
+        setSucursal(value);
+        setHorarioDetails("");
+        if (selectedProducto.horarios.length > 0) {
+            const selectedHorario = selectedProducto.horarios.find(horario => horario.id_sucursal === value);
+            if (selectedHorario) {
+                fetchHorarioDetails(selectedHorario.id_horarios);
+            }
+
+        }
+
+
+    };
+
 
     const fetchSucursal = () => {
         setSucursalesData([]);
@@ -51,11 +69,85 @@ const EditarProducto = () => {
             });
     };
 
+    const editHorarioCreate = async (jsonHorario) => {
+        try {
+            if (selectedProducto.horarios.length > 0) {
+                const selectedHorario = selectedProducto.horarios.find(horario => horario.id_sucursal === selectedSucursal);
+                if (selectedHorario) {
+                    const formDataObject = new FormData();
+                    formDataObject.append('detalle', JSON.stringify(jsonHorario));
+
+                    const response = await fetch('http://127.0.0.1:8000/horarios/edit/' + selectedHorario.id_horarios, {
+                        method: 'POST',
+                        body: formDataObject,
+                    });
+
+                    const responseData = await response.json();
+
+                    if (responseData.mensaje) {
+                        notification.success({
+                            message: 'Éxito',
+                            description: 'Horario editado exitosamente',
+                        });
+                    } else {
+                        notification.error({
+                            message: 'Error',
+                            description: 'Error al editar el horario: ' + responseData.error,
+                        });
+                    }
+                }
+
+            }
+
+        } catch (error) {
+            notification.error({
+                message: 'Error',
+                description: 'Error al editar el horario'+error,
+            });
+        }
+    };
+
+    const handleHorarioCreate = async (jsonHorario) => {
+        try {
+            const formDataObject = new FormData();
+            formDataObject.append('nombreh', 'horarioProducto' + selectedProducto.id_producto);
+            formDataObject.append('detalle', JSON.stringify(jsonHorario));
+            formDataObject.append('idsucursal', selectedSucursal);
+            formDataObject.append('idproducto', selectedProducto.id_producto);
+            const response = await fetch('http://127.0.0.1:8000/horarios/CrearHorarioProducto/', {
+                method: 'POST',
+                body: formDataObject,
+            });
+
+            const responseData = await response.json();
+
+            if (response.ok) {
+                notification.success({
+                    message: 'Éxito',
+                    description: 'Horario creado exitosamente',
+                });
+            } else {
+                notification.error({
+                    message: 'Error',
+                    description: 'Error al crear el horario: ' + responseData.error,
+                });
+            }
+        } catch (error) {
+            notification.error({
+                message: 'Error',
+                description: 'Error al validar el formulario' + error,
+            });
+        }
+    };
+
     const onCloseH = () => {
         setOpenH(false)
+        setSucursal('');
     }
 
-    const viewadminH = () => {
+    const viewadminH = (productId) => {
+        setProducto(productId);
+        console.log(productId.horarios)
         if (SucursalesData && SucursalesData.length > 0) {
             const firstFiveSucursales = SucursalesData.slice(0, 5);
             const options = firstFiveSucursales.map((sucursal) => sucursal.snombre);
@@ -69,6 +161,39 @@ const EditarProducto = () => {
         }
         setOpenH(true);
     }
+
+    const HorarioCreate = async (jsonHorario) => {
+        try {
+            const formDataObject = new FormData();
+            formDataObject.append('detalle', JSON.stringify(jsonHorario));
+            formDataObject.append('id_sucursal', selectedSucursal);
+
+
+            const response = await fetch('http://127.0.0.1:8000/producto/editarproducto/' + productId + '/', {
+                method: 'POST',
+                body: formDataObject,
+            });
+
+            const responseData = await response.json();
+
+            if (responseData.mensaje) {
+                notification.success({
+                    message: 'Éxito',
+                    description: 'Horario editado exitosamente',
+                });
+            } else {
+                notification.error({
+                    message: 'Error',
+                    description: 'Error al editar el horario: ' + responseData.error,
+                });
+            }
+        } catch (error) {
+            notification.error({
+                message: 'Error',
+                description: 'Error al validar el formulario',
+            });
+        }
+    };
 
     const Changueopcion = (value) => {
         setSelectedOpcion(value);
@@ -133,8 +258,8 @@ const EditarProducto = () => {
 
     const handleEditClick = (productId) => {
 
-        const productoToEdit = productos.find((producto) => producto.id_producto === productId);
-        setEditingProductId(productId);
+        const productoToEdit = productos.find((producto) => producto.id_producto === productId.id_producto);
+        setEditingProductId(productId.id_producto);
         setInitialFormValues(productoToEdit);
         setEditModalVisible(true);
     };
@@ -152,6 +277,24 @@ const EditarProducto = () => {
             return Promise.reject('Solo se permiten archivos de imagen');
         }
         return Promise.resolve();
+    };
+
+
+    const fetchHorarioDetails = async (idHorario) => {
+        try {
+            console.log(idHorario);
+            const response = await fetch('http://127.0.0.1:8000/horarios/get/' + idHorario);
+            const data = await response.json();
+
+            if (data.detalles) {
+                setHorarioDetails(data.detalles);
+            }
+        } catch (error) {
+            notification.warning({
+                message: 'No hay horario',
+                description: 'No haz creado un horario de atención para tu sucursal',
+            });
+        }
     };
 
     const handleSaveEdit = async (productId, formValues) => {
@@ -341,7 +484,7 @@ const EditarProducto = () => {
                                                                         <Tooltip title='Editar producto'>
                                                                             <Button
                                                                                 icon={<EditFilled />}
-                                                                                onClick={() => handleEditClick(producto.id_producto)}
+                                                                                onClick={() => handleEditClick(producto)}
                                                                             >
                                                                             </Button>
                                                                         </Tooltip>
@@ -350,7 +493,7 @@ const EditarProducto = () => {
                                                                         <Tooltip title='Horarios de atención'>
                                                                             <Button
                                                                                 icon={<CalendarTwoTone />}
-                                                                                onClick={() => viewadminH()}
+                                                                                onClick={() => viewadminH(producto)}
                                                                             >
                                                                             </Button>
                                                                         </Tooltip>
@@ -373,7 +516,7 @@ const EditarProducto = () => {
                                                                         <Tooltip title='Editar producto'>
                                                                             <Button
                                                                                 icon={<EditFilled />}
-                                                                                onClick={() => handleEditClick(producto.id_producto)}
+                                                                                onClick={() => handleEditClick(producto)}
                                                                             >
                                                                             </Button>
                                                                         </Tooltip>
@@ -382,7 +525,7 @@ const EditarProducto = () => {
                                                                         <Tooltip title='Horarios de atención'>
                                                                             <Button
                                                                                 icon={<CalendarTwoTone />}
-                                                                                onClick={() => viewadminH()}
+                                                                                onClick={() => viewadminH(producto)}
                                                                             >
                                                                             </Button>
                                                                         </Tooltip>
@@ -477,15 +620,22 @@ const EditarProducto = () => {
                     <Col md={6}>
                         <Segmented options={optionSucursales2}
                             value={selectedSucursal}
-                            onChange={setSucursal}
+                            onChange={handleProductoChange}
                         />
                     </Col>
-                    <p>{selectedSucursal}</p>
                 </Row>
-                {selectedSucursal!='' && (
+                {selectedSucursal != '' && horarioDetails != '' && (
                     <>
+                        <CrearHorariosSemanales detalles={horarioDetails} onHorarioCreate={editHorarioCreate} />
 
-                        <CrearHorariosSemanales  />
+
+                    </>
+                )}
+                {selectedSucursal != '' && horarioDetails == '' && (
+                    <>
+                        <CrearHorariosSemanales onHorarioCreate={handleHorarioCreate} />
+
+
                     </>
                 )}
 
