@@ -29,7 +29,7 @@ const Combos = () => {
         setCurrentPage(page);
     };
 
-    
+
     return (
         <div>
             <Row>
