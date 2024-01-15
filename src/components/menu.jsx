@@ -26,7 +26,6 @@ const MenuG = () => {
     const tooltipTitle6 = 'Agrega y edita combos de los productos';
     const tooltipTitle7 = 'Agrega y gestiona las rescompensas de los productos';
     const tooltipTitle8 = 'Agrega y gestiona tus sucursales';
-    const tooltipTitle9 = 'Agrega y gestiona tus combos';
     const [currentPage, setCurrentPage] = useState('home');
 
     const handleCardClick = (page) => {
