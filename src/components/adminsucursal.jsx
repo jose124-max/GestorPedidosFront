@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Table, Select, Switch, notification, Modal, Upload, Card, Tooltip, Watermark, Badge, Tag, Divider, Drawer, Segmented, Avatar } from 'antd';
+import { Form, Input, Button, Table, Select, Switch,message , notification, Modal, Upload, Card, Tooltip, Watermark, Badge, Tag, Divider, Drawer, Segmented, Avatar } from 'antd';
 import { Row, Col } from 'react-bootstrap';
 import { UploadOutlined, EditFilled, UserOutlined } from '@ant-design/icons';
 import MapaActual from './mapaactual';
@@ -417,7 +417,6 @@ const AdminSucursal = ({ idsucursalx }) => {
                                 return false;
                             }
                             return true;
-                            message.error('Por favor, selecciona una imagen válida.');
                         }}
                         accept=".png, .jpg, .jpeg"
                     >
@@ -682,7 +681,7 @@ const AdminSucursal = ({ idsucursalx }) => {
                     <Col md={12}>
                         <Segmented
                             options={[
-                                { 
+                                {
                                     label: (
                                         <Tooltip title="Administradores">
                                             <div style={{ padding: 4 }}>

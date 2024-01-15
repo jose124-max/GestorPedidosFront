@@ -10,6 +10,7 @@ import CrearProducto from './CrearProducto';
 import EditarTipoProducto from './editartipoproducto'
 import EditarCategoria from './editarcategoria';
 import EditarUnidadesMedida from './editarunidadmedida';
+import CrearHorariosSemanales from './crearhorarioS';
 
 const { Meta } = Card;
 const { Option } = Select;
@@ -30,6 +31,7 @@ const EditarProducto = () => {
     const [SucursalesData, setSucursalesData] = useState(null);
     const [optionSucursales, setOptions] = useState([]);
     const [optionSucursales2, setOptions2] = useState([]);
+    const [selectedSucursal, setSucursal] = useState([null]);
     useEffect(() => {
         fetchSucursal();
     }, []);
@@ -42,7 +44,7 @@ const EditarProducto = () => {
             .then((response) => response.json())
             .then((data) => {
                 setSucursalesData(data.sucursales);
-                
+
             })
             .catch((error) => {
                 console.error('Error al obtener los datos de sucursales:', error);
@@ -317,9 +319,9 @@ const EditarProducto = () => {
                         </Col>
                         <Col md={12}>
                             <Row>
-                                
-                                    {productos.map((producto) => (
-                                        <Col xs={24} sm={12} md={3} lg={3}>
+
+                                {productos.map((producto) => (
+                                    <Col xs={24} sm={12} md={3} lg={3}>
                                         <Card
                                             key={producto.id_producto}
                                             hoverable
@@ -407,9 +409,9 @@ const EditarProducto = () => {
                                                 <Badge count={getCategoriaNombre(producto.id_categoria)} showZero color='#CE6F04' />
                                             </Tooltip>
                                         </Card>
-                                        </Col>
-                                    ))}
-                                
+                                    </Col>
+                                ))}
+
                             </Row>
                             <Pagination current={currentPage} total={total} onChange={handlePageChange} pageSize={8} style={{ marginTop: '16px', textAlign: 'center' }} />
                         </Col>
@@ -471,11 +473,21 @@ const EditarProducto = () => {
                 }}
             >
 
-                    <Row>
-                        <Col md={6}>
-                            <Segmented options={optionSucursales2} />
-                        </Col>
-                    </Row>
+                <Row>
+                    <Col md={6}>
+                        <Segmented options={optionSucursales2}
+                            value={selectedSucursal}
+                            onChange={setSucursal}
+                        />
+                    </Col>
+                    <p>{selectedSucursal}</p>
+                </Row>
+                {selectedSucursal!='' && (
+                    <>
+
+                        <CrearHorariosSemanales  />
+                    </>
+                )}
 
 
 
