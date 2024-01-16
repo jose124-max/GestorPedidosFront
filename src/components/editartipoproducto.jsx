@@ -15,8 +15,9 @@ const EditarTipoProducto = () => {
   const [searchText, setSearchText] = useState('');
 
   const onCloseetp = () => {
-    setOpenetp(false);
     listarp();
+    setOpenetp(false);
+    
   };
 
   const showDrawertp = () => {
@@ -25,6 +26,7 @@ const EditarTipoProducto = () => {
 
   const onClosetp = () => {
     setOpentp(false);
+    listarp();
   };
 
   const eliminartp = async (idtp) => {

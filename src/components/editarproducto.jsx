@@ -11,6 +11,8 @@ import EditarTipoProducto from './editartipoproducto'
 import EditarCategoria from './editarcategoria';
 import EditarUnidadesMedida from './editarunidadmedida';
 import CrearHorariosSemanales from './crearhorarioS';
+import articulo from './res/articulos.png'
+import EditarComponenteForm from './EditarComponente'
 
 const { Meta } = Card;
 const { Option } = Select;
@@ -447,6 +449,17 @@ const EditarProducto = () => {
                                 ),
                                 value: 'um',
                             }
+                            ,
+                            {
+                                label: (
+                                    <Tooltip title="Artículos">
+                                        <div style={{ padding: 4 }}>
+                                            <Avatar shape="square" size="large" src={articulo} />
+                                        </div>
+                                    </Tooltip>
+                                ),
+                                value: 'articulo',
+                            }
                         ]}
                         value={selectedOpcion}
                         onChange={Changueopcion}
@@ -575,10 +588,15 @@ const EditarProducto = () => {
                     </>)}
                 {selectedOpcion === 'um' && (
                     <>
-                        <Divider>Control unidad de media</Divider>
+                        <Divider>Control unidad de medida</Divider>
                         <Col md={12}>
                             <EditarUnidadesMedida />
                         </Col>
+                    </>)}
+                {selectedOpcion === 'articulo' && (
+                    <>
+                        <Divider>Control de artículos</Divider>
+                        <EditarComponenteForm/>
                     </>)}
             </Row>
             <Modal
