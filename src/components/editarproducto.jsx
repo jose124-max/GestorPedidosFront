@@ -627,22 +627,13 @@ const EditarProducto = () => {
                 {selectedSucursal != '' && horarioDetails != '' && (
                     <>
                         <CrearHorariosSemanales detalles={horarioDetails} onHorarioCreate={editHorarioCreate} />
-
-
                     </>
                 )}
                 {selectedSucursal != '' && horarioDetails == '' && (
                     <>
                         <CrearHorariosSemanales onHorarioCreate={handleHorarioCreate} />
-
-
                     </>
                 )}
-
-
-
-
-
             </Drawer>
         </div>
     );

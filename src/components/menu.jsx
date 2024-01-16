@@ -16,6 +16,7 @@ import subsidiario from './res/subsidiario.png'
 import EditarProducto from './editarproducto.jsx';
 import Combos from './combo.jsx';
 import Bodegas from './bodegas.jsx';
+import Mesas from './editarmesa.jsx';
 
 const MenuG = () => {
     const { Meta } = Card;
@@ -55,7 +56,7 @@ const MenuG = () => {
         whiteSpace: 'nowrap',
     };
 
-    
+
 
     return (
         <>
@@ -73,7 +74,7 @@ const MenuG = () => {
                                             <Image
                                                 alt="Empresa"
                                                 src={imgempresa}
-                                                style={{ padding:'5%',height: '150px', width:'auto'}}
+                                                style={{ padding: '5%', height: '150px', width: 'auto' }}
                                                 preview={false}
                                             />}
                                         className="text-center"
@@ -94,7 +95,7 @@ const MenuG = () => {
                                             <Image
                                                 alt="Empleados"
                                                 src={imgempleado}
-                                                style={{ padding:'5%',height: '150px', width:'auto'}}
+                                                style={{ padding: '5%', height: '150px', width: 'auto' }}
                                                 preview={false}
                                             />}
                                         className="text-center"
@@ -115,7 +116,7 @@ const MenuG = () => {
                                             <Image
                                                 alt="Productos"
                                                 src={imgproductos}
-                                                style={{ padding:'5%',height: '150px', width:'auto'}}
+                                                style={{ padding: '5%', height: '150px', width: 'auto' }}
                                                 preview={false}
                                             />}
                                         className="text-center"
@@ -136,7 +137,7 @@ const MenuG = () => {
                                             <Image
                                                 alt="Combos"
                                                 src={imgcombos}
-                                                style={{ padding:'5%',height: '150px', width:'auto'}}
+                                                style={{ padding: '5%', height: '150px', width: 'auto' }}
                                                 preview={false}
                                             />}
                                         className="text-center"
@@ -157,7 +158,7 @@ const MenuG = () => {
                                             <Image
                                                 alt="Avisos principales"
                                                 src={imgaviso}
-                                                style={{ padding:'5%',height: '150px', width:'auto'}}
+                                                style={{ padding: '5%', height: '150px', width: 'auto' }}
                                                 preview={false}
                                             />}
                                         className="text-center"
@@ -177,10 +178,11 @@ const MenuG = () => {
                                             <Image
                                                 alt="Mesas"
                                                 src={imgmesas}
-                                                style={{ padding:'5%',height: '150px', width:'auto'}}
+                                                style={{ padding: '5%', height: '150px', width: 'auto' }}
                                                 preview={false}
                                             />}
                                         className="text-center"
+                                        onClick={() => handleCardClick('mesas')}
                                     >
                                         <Meta title={tooltipTitle5}></Meta>
                                     </Card>
@@ -197,7 +199,7 @@ const MenuG = () => {
                                             <Image
                                                 alt="Recompensas"
                                                 src={imgrecompensa}
-                                                style={{ padding:'5%',height: '150px', width:'auto'}}
+                                                style={{ padding: '5%', height: '150px', width: 'auto' }}
                                                 preview={false}
                                             />}
                                         className="text-center"
@@ -217,7 +219,7 @@ const MenuG = () => {
                                             <Image
                                                 alt="Sucursales"
                                                 src={subsidiario}
-                                                style={{ padding:'5%',height: '150px', width:'auto'}}
+                                                style={{ padding: '5%', height: '150px', width: 'auto' }}
                                                 preview={false}
                                             />}
                                         className="text-center"
@@ -238,7 +240,7 @@ const MenuG = () => {
                                             <Image
                                                 alt="Bodegas"
                                                 src={subsidiario}
-                                                style={{ padding:'5%',height: '150px', width:'auto'}}
+                                                style={{ padding: '5%', height: '150px', width: 'auto' }}
                                                 preview={false}
                                             />}
                                         className="text-center"
@@ -260,7 +262,7 @@ const MenuG = () => {
                         </Row>
 
                     </>)}
-                    {currentPage === 'empleado' && (
+                {currentPage === 'empleado' && (
                     <>
                         <Row>
                             <Col md={12}>
@@ -269,7 +271,7 @@ const MenuG = () => {
                         </Row>
 
                     </>)}
-                    {currentPage === 'sucursal' && (
+                {currentPage === 'sucursal' && (
                     <>
                         <Row>
                             <Col md={12}>
@@ -278,7 +280,7 @@ const MenuG = () => {
                         </Row>
 
                     </>)}
-                    {currentPage != 'home' && (
+                {currentPage != 'home' && (
                     <>
                         <Row>
                             <Col md={12}>
@@ -293,38 +295,48 @@ const MenuG = () => {
                         </Row>
 
                     </>)}
-                    {currentPage == 'productos' && (
+                {currentPage == 'productos' && (
                     <>
-                    <Divider>Productos</Divider>
+                        <Divider>Productos</Divider>
                         <Row>
                             <Col md={12}>
-                                <EditarProducto/>
+                                <EditarProducto />
                             </Col>
                         </Row>
 
                     </>)}
-                    {currentPage == 'combos' && (
+                {currentPage == 'combos' && (
                     <>
-                    <Divider>Combos</Divider>
+                        <Divider>Combos</Divider>
                         <Row>
                             <Col md={12}>
-                                <Combos/>
+                                <Combos />
                             </Col>
                         </Row>
 
                     </>)}
-                    {currentPage == 'bodegas' && (
+                {currentPage == 'mesas' && (
                     <>
-                    <Divider>Bodegas</Divider>
+                        <Divider>Mesas</Divider>
                         <Row>
                             <Col md={12}>
-                                <Bodegas/>
+                                <Mesas />
+                            </Col>
+                        </Row>
+
+                    </>)}
+                {currentPage == 'bodegas' && (
+                    <>
+                        <Divider>Bodegas</Divider>
+                        <Row>
+                            <Col md={12}>
+                                <Bodegas />
                             </Col>
                         </Row>
 
                     </>)}
             </Row>
- 
+
         </>
     );
 };

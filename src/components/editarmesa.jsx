@@ -1,20 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Input, Select, message } from 'antd';
+import { Table, Form, Card, Input, Pagination, Button, Select, Modal, Upload, Tooltip, Badge, Segmented, Avatar, Checkbox, notification, Drawer, Divider, Watermark, message } from 'antd';
+import { Row, Col } from 'react-bootstrap';
+import { UploadOutlined, CalendarTwoTone, EditFilled } from '@ant-design/icons';
+import imgmesas from './res/imgmesas.png';
+import CrearMesa from './crearmesa';
 
-const EditarMesa = () => {
+const Mesas = () => {
   const [mesas, setMesas] = useState([]);
   const [editingMesa, setEditingMesa] = useState(null);
   const [form] = Form.useForm();
+  const [selectedOpcion, setSelectedOpcion] = useState('Mesas');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [openp, setOpenp] = useState(false);
 
   useEffect(() => {
-    // Hacer la solicitud a tu API para obtener las mesas
     fetch('http://127.0.0.1:8000/Mesas/ver_mesas/')
       .then(response => response.json())
       .then(data => setMesas(data.mesas))
       .catch(error => console.error('Error al obtener las mesas:', error));
   }, []);
 
-  const showEditModal = (mesa) => { 
+  const showEditModal = (mesa) => {
     setEditingMesa(mesa);
     form.setFieldsValue({
       observacion: mesa.observacion,
@@ -36,20 +43,18 @@ const EditarMesa = () => {
       formData.append('activa', values.activa);
       formData.append('max_personas', values.max_personas);
 
-      // Hacer la solicitud a tu API para editar la mesa
       await fetch(`http://127.0.0.1:8000/Mesas/editar_mesa/${mesa_id}/`, {
         method: 'POST',
         body: formData,
       });
 
-      // Actualizar la lista de mesas después de la edición
       fetch('http://127.0.0.1:8000/Mesas/ver_mesas/')
         .then(response => response.json())
         .then(data => setMesas(data.mesas))
         .catch(error => console.error('Error al obtener las mesas:', error));
 
       hideModal();
-      
+
       // Mostrar mensaje de éxito
       message.success('Mesa editada con éxito');
     } catch (error) {
@@ -65,6 +70,22 @@ const EditarMesa = () => {
     setVisible(true);
   };
 
+  const Changueopcion = (value) => {
+    setSelectedOpcion(value);
+  }
+
+  const showDrawerp = () => {
+    setOpenp(true);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+  
+  const onClosep = () => {
+    setOpenp(false);
+  };
+  
   const hideModal = () => {
     setVisible(false);
     setEditingMesa(null);
@@ -117,40 +138,87 @@ const EditarMesa = () => {
 
   return (
     <div>
-      <h1>Mesas</h1>
-      <Table dataSource={mesas} columns={columns} rowKey="id_mesa" />
-
-      <Modal
-        title="Editar Mesa"
-        visible={visible}
-        onOk={handleEdit}
-        onCancel={hideModal}
+      <Row>
+        <Col md={12}>
+          <Segmented
+            options={[
+              {
+                label: (
+                  <Tooltip title="Mesas">
+                    <div style={{ padding: 4 }}>
+                      <Avatar shape="square" src={imgmesas} size="large" />
+                    </div>
+                  </Tooltip>
+                ),
+                value: 'Mesas',
+              }
+            ]}
+            value={selectedOpcion}
+            onChange={Changueopcion}
+          />
+        </Col>
+        {selectedOpcion === 'Mesas' && (
+          <>
+            <Divider>Control mesas</Divider>
+            <Col md={12}>
+              <Button type="primary" style={{ width: '100%', margin: '2%' }} onClick={showDrawerp}>
+                Crear nueva mesa
+              </Button>
+            </Col>
+            <Col md={12}>
+              <Row>
+                <Table dataSource={mesas} columns={columns} rowKey="id_mesa" />
+                <Modal
+                  title="Editar Mesa"
+                  visible={visible}
+                  onOk={handleEdit}
+                  onCancel={hideModal}
+                >
+                  <Form form={form}>
+                    <Form.Item label="Observación" name="observacion">
+                      <Input />
+                    </Form.Item>
+                    <Form.Item label="Estado" name="estado">
+                      <Select>
+                        <Select.Option value="D">Disponible</Select.Option>
+                        <Select.Option value="R">Reservada</Select.Option>
+                        <Select.Option value="U">En uso</Select.Option>
+                        <Select.Option value="A">Atendida</Select.Option>
+                      </Select>
+                    </Form.Item>
+                    <Form.Item label="Activa" name="activa">
+                      <Select>
+                        <Select.Option value="1">Activa</Select.Option>
+                        <Select.Option value="0">Desactivada</Select.Option>
+                      </Select>
+                    </Form.Item>
+                    <Form.Item label="Max Personas" name="max_personas">
+                      <Input />
+                    </Form.Item>
+                  </Form>
+                </Modal>
+              </Row>
+              <Pagination current={currentPage} total={total} onChange={handlePageChange} pageSize={8} style={{ marginTop: '16px', textAlign: 'center' }} />
+            </Col>
+          </>
+        )}
+      </Row>
+      <Drawer
+        title="Crear Mesa"
+        width={720}
+        onClose={onClosep}
+        open={openp}
+        styles={{
+          body: {
+            paddingBottom: 80,
+          },
+        }}
       >
-        <Form form={form}>
-          <Form.Item label="Observación" name="observacion">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Estado" name="estado">
-            <Select>
-              <Select.Option value="D">Disponible</Select.Option>
-              <Select.Option value="R">Reservada</Select.Option>
-              <Select.Option value="U">En uso</Select.Option>
-              <Select.Option value="A">Atendida</Select.Option>
-            </Select>
-          </Form.Item>
-          <Form.Item label="Activa" name="activa">
-            <Select>
-              <Select.Option value="1">Activa</Select.Option>
-              <Select.Option value="0">Desactivada</Select.Option>
-            </Select>
-          </Form.Item>
-          <Form.Item label="Max Personas" name="max_personas">
-            <Input />
-          </Form.Item>
-        </Form>
-      </Modal>
+        <CrearMesa />
+      </Drawer>
     </div>
   );
+
 };
 
-export default EditarMesa;
+export default Mesas;
