@@ -15,6 +15,7 @@ import Sucursales from './sucursales.jsx';
 import subsidiario from './res/subsidiario.png'
 import EditarProducto from './editarproducto.jsx';
 import Combos from './combo.jsx';
+import Bodegas from './bodegas.jsx';
 
 const MenuG = () => {
     const { Meta } = Card;
@@ -26,6 +27,7 @@ const MenuG = () => {
     const tooltipTitle6 = 'Agrega y edita combos de los productos';
     const tooltipTitle7 = 'Agrega y gestiona las rescompensas de los productos';
     const tooltipTitle8 = 'Agrega y gestiona tus sucursales';
+    const tooltipTitle9 = 'Agrega y gestiona las bodegas';
     const [currentPage, setCurrentPage] = useState('home');
 
     const handleCardClick = (page) => {
@@ -226,6 +228,27 @@ const MenuG = () => {
                                 </Tooltip>
                             </Badge.Ribbon>
                         </Col>
+                        <Col xs={24} sm={12} md={5} lg={3}>
+                            <Badge.Ribbon text="Bodegas" color="#F84173">
+                                <Tooltip title={tooltipTitle9}>
+                                    <Card
+                                        hoverable
+                                        style={cardStyle}
+                                        cover={
+                                            <Image
+                                                alt="Bodegas"
+                                                src={subsidiario}
+                                                style={{ padding:'5%',height: '150px', width:'auto'}}
+                                                preview={false}
+                                            />}
+                                        className="text-center"
+                                        onClick={() => handleCardClick('bodegas')}
+                                    >
+                                        <Meta title={tooltipTitle9}></Meta>
+                                    </Card>
+                                </Tooltip>
+                            </Badge.Ribbon>
+                        </Col>
                     </>
                 )}
                 {currentPage === 'empresa' && (
@@ -286,6 +309,16 @@ const MenuG = () => {
                         <Row>
                             <Col md={12}>
                                 <Combos/>
+                            </Col>
+                        </Row>
+
+                    </>)}
+                    {currentPage == 'bodegas' && (
+                    <>
+                    <Divider>Bodegas</Divider>
+                        <Row>
+                            <Col md={12}>
+                                <Bodegas/>
                             </Col>
                         </Row>
 
