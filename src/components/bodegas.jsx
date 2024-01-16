@@ -26,10 +26,9 @@ const Bodegas = () => {
     };
 
     const handleEditarBodega = (bodega) => {
-        setSelectedBodega({ ...bodega });  // Copia el objeto bodega para evitar modificar el estado original
+        setSelectedBodega(bodega);
         setOpenp(true);
     };
-    
 
     useEffect(() => {
         if (selectedOpcion === 'Bodegas') {
@@ -96,7 +95,11 @@ const Bodegas = () => {
                     },
                 }}
             >
-                <EditarBodegaForm bodega={selectedBodega} onClose={onClosep} />
+                {selectedBodega ? (
+                    <EditarBodegaForm bodega={selectedBodega} />
+                ) : (
+                    <CrearBodegaForm />
+                )}
             </Drawer>
         </div>
     );
