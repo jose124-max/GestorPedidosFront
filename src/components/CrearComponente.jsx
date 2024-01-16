@@ -8,8 +8,25 @@ const { Option } = Select;
 const CrearComponenteForm = () => {
   const [loading, setLoading] = useState(false);
   const [unidadesMedida, setUnidadesMedida] = useState([]);
+  const [categorias, setCategorias] = useState([]);
 
   useEffect(() => {
+    const fetchCategorias = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/producto/listar_categorias/');
+        if (response.ok) {
+          const data = await response.json();
+          setCategorias(data.categorias);
+        } else {
+          const errorData = await response.json();
+          message.error(errorData.error);
+        }
+      } catch (error) {
+        console.error('Error al cargar las categorías:', error);
+        message.error('Hubo un error al cargar las categorías');
+      }
+    };
+
     const fetchUnidadesMedida = async () => {
       try {
         const response = await fetch('http://127.0.0.1:8000/producto/listarum/');
@@ -27,12 +44,11 @@ const CrearComponenteForm = () => {
     };
 
     fetchUnidadesMedida();
+    fetchCategorias();
   }, []);
 
   const onFinish = async (values) => {
     setLoading(true);
-
-    // Verificar si el campo costo está vacío y establecerlo en 0.00 si es así
     if (values.costo === undefined || values.costo === null || values.costo === '') {
       values.costo = 0.00;
     }
@@ -77,10 +93,20 @@ const CrearComponenteForm = () => {
       <Item
         label="Descripción"
         name="descripcion"
-        rules={[{ required: true, message: 'Por favor, ingrese la descripción del componente' }]}
       >
         <Input.TextArea />
       </Item>
+
+      <Form.Item name="id_categoria" label="Categoría" rules={[{ required: true }]}>
+        <Select placeholder="Seleccione una categoría">
+          {categorias.map((categoria) => (
+            <Select.Option key={categoria.id_categoria} value={categoria.id_categoria}>
+              {categoria.catnombre}
+            </Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
+
 
       <Item
         label="Costo"
@@ -94,6 +120,7 @@ const CrearComponenteForm = () => {
           step={0.01}
           formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+          min={0}
         />
       </Item>
 

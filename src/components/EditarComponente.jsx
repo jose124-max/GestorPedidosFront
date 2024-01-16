@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Modal, message, Form, Input, Select, InputNumber } from 'antd';
+import { Table, Button, Modal, message, Form, Input, Select, InputNumber,Drawer } from 'antd';
+import { Row, Col } from 'react-bootstrap';
 import { EditOutlined } from '@ant-design/icons';
+import CrearComponenteForm from './CrearComponente';
 
 const { Item } = Form;
 const { Option } = Select;
@@ -10,6 +12,16 @@ const EditarComponenteForm = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [editComponente, setEditComponente] = useState({});
   const [unidadesMedida, setUnidadesMedida] = useState([]);
+  const [opencom, setOpencom] = useState(false);
+
+  const showDrawercom = () => {
+    setOpencom(true);
+  };
+
+  const onClosecom = () => {
+    setOpencom(false);
+    fetchComponentes();
+  };
 
   useEffect(() => {
     const fetchComponentes = async () => {
@@ -136,9 +148,17 @@ const EditarComponenteForm = () => {
     }
   };
 
-  
+
   return (
     <div>
+      <Row>
+        <Col md={12}>
+          <Button type="primary" style={{ width: '100%', margin: '2%' }} onClick={showDrawercom}>
+            Crear artículo
+          </Button>
+        </Col>
+      </Row>
+
       <Table dataSource={componentes} columns={columns} />
 
       <Modal
@@ -193,6 +213,19 @@ const EditarComponenteForm = () => {
           </Item>
         </Form>
       </Modal>
+      <Drawer
+        title="Crear artículo"
+        width={720}
+        open={opencom}
+        onClose={onClosecom}
+        styles={{
+          body: {
+            paddingBottom: 80,
+          },
+        }}
+      >
+        <CrearComponenteForm/>
+      </Drawer>
     </div>
   );
 };
