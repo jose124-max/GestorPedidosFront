@@ -17,6 +17,7 @@ import EditarProducto from './editarproducto.jsx';
 import Combos from './combo.jsx';
 import Bodegas from './bodegas.jsx';
 import Mesas from './editarmesa.jsx';
+import EditarBodegaForm from './editarbodega.jsx';
 
 const MenuG = () => {
     const { Meta } = Card;
@@ -330,7 +331,7 @@ const MenuG = () => {
                         <Divider>Bodegas</Divider>
                         <Row>
                             <Col md={12}>
-                                <Bodegas />
+                                <EditarBodegaForm />
                             </Col>
                         </Row>
 

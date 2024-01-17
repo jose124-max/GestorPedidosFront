@@ -6,6 +6,7 @@ import imgmesas from './res/imgmesas.png';
 import CrearMesa from './crearmesa';
 
 const Mesas = () => {
+  const [editModalVisible, setEditModalVisible] = useState(false);
   const [mesas, setMesas] = useState([]);
   const [editingMesa, setEditingMesa] = useState(null);
   const [form] = Form.useForm();
@@ -81,16 +82,32 @@ const Mesas = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-  
+
   const onClosep = () => {
     setOpenp(false);
   };
-  
+
   const hideModal = () => {
     setVisible(false);
     setEditingMesa(null);
     form.resetFields();
   };
+
+  const cargarMesas = async () => {
+    fetch('http://127.0.0.1:8000/Mesas/ver_mesas/')
+      .then(response => response.json())
+      .then(data => setMesas(data.mesas))
+      .catch(error => console.error('Error al obtener las mesas:', error));
+
+    hideModal();
+  };
+
+  useEffect(() => {
+    form.resetFields();
+    if (!editModalVisible) {
+      cargarMesas(currentPage);
+    }
+  }, [mesas]);
 
   const columns = [
     {

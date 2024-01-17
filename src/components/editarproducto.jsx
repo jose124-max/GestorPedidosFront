@@ -49,17 +49,13 @@ const EditarProducto = () => {
             if (selectedHorario) {
                 fetchHorarioDetails(selectedHorario.id_horarios);
             }
-
         }
-
-
     };
 
 
     const fetchSucursal = () => {
         setSucursalesData([]);
         const url = `http://127.0.0.1:8000/sucursal/sucusarleslist/`;
-
         fetch(url)
             .then((response) => response.json())
             .then((data) => {
@@ -341,7 +337,6 @@ const EditarProducto = () => {
     };
 
     const showModalContent = (producto) => {
-
         return (
             <Form form={form} onFinish={(values) => handleSaveEdit(producto.id_producto, values)}>
                 <Form.Item label="Nombre del Producto" name="nombreproducto" initialValue={producto.nombreproducto}>
