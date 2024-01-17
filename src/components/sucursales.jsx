@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { UserOutlined, CloseOutlined } from '@ant-design/icons';
 import { Badge, Button, Card, Modal, message, Switch, Watermark, Tooltip, Result, Drawer } from 'antd';
 import { Row, Col } from 'react-bootstrap';
-import CrearSucursal from './CrearSucursal';
+import CrearSucursal from './crearsucursal';
 import mapa from './res/mapa.png';
 import MapaActual from './mapaactual';
 import Mapafijo from './mapafijo';
