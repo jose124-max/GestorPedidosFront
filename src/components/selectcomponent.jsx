@@ -47,7 +47,6 @@ const TransferContainer = ({onValor}) => {
                     }
                 } else {
                     const errorData = await response.json();
-                    message.error(errorData.error);
                 }
             } catch (error) {
                 console.error('Error al cargar los componentes:', error);
@@ -115,7 +114,6 @@ const TransferContainer = ({onValor}) => {
                                 <th></th>
                                 <th>Nombre</th>
                                 <th>Cantidad</th>
-                                <th>Cantidad</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -137,7 +135,6 @@ const TransferContainer = ({onValor}) => {
                                             />
                                         </div>
                                     </td>
-                                    <td>{item.id_um}</td>
                                 </tr>
                             ))}
                         </tbody>

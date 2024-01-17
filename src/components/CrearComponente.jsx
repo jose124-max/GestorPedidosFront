@@ -81,7 +81,6 @@ const CrearComponenteForm = () => {
   }, []);
 
   const savedetalle = async (jsondetalle) => {
-    message.success(jsondetalle);
     setdetallecomponente(jsondetalle);
   }
 
@@ -110,10 +109,10 @@ const CrearComponenteForm = () => {
         message.success('Se creó el componente con exito');
         form.resetFields();
       } else {
-        message.error('Algo salió mal'+error);
+        message.error('Algo salió mal' + error);
       }
     } catch (error) {
-      message.error('Algo salió mal'+error);
+      message.error('Algo salió mal' + error);
     }
   };
 
@@ -176,32 +175,6 @@ const CrearComponenteForm = () => {
           <Option value="F">Fabricado</Option>
         </Select>
       </Item>
-
-      {agregarDetalle && (
-        <Row>
-          <Col md={12}>
-            <Item
-        label="cantidad"
-        name="cantidad"
-        rules={[
-          { required: false },
-          { type: 'number', message: 'Por favor, ingrese un valor numérico válido para el costo' },
-        ]}
-      >
-        <InputNumber
-          step={0.01}
-          formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
-          parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-          min={0}
-        />
-      </Item>
-            <h6>Selecciona los artículos que ensamblan tu artículo</h6>
-            <div style={{ border: '1px solid #A4A4A4', padding: '2%', margin: '5%' }}>
-              <TransferContainer onValor={savedetalle} />
-            </div>
-          </Col>
-        </Row>
-      )}
       <Item
         label="Unidades de Medida"
         name="id_um"
@@ -215,6 +188,35 @@ const CrearComponenteForm = () => {
           ))}
         </Select>
       </Item>
+
+      {agregarDetalle && (
+
+        <Row>
+          <label>Cantidad generada a partir del ensamble</label>
+          <Col md={12}>
+            <Item
+            label=':'
+              name="cantidad"
+              rules={[
+                { required: false },
+                { type: 'number', message: 'Por favor, ingrese un valor numérico válido para la cantidad' },
+              ]}
+            >
+              <InputNumber
+                step={0.01}
+                formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                min={0}
+              />
+            </Item>
+            <h6>Selecciona los artículos que ensamblan tu artículo</h6>
+            <div style={{ border: '1px solid #A4A4A4', padding: '2%', margin: '5%' }}>
+              <TransferContainer onValor={savedetalle} />
+            </div>
+          </Col>
+        </Row>
+      )}
+
+
 
       <Item wrapperCol={{ offset: 8, span: 16 }}>
         <Button type="primary" htmlType="submit" icon={<PlusOutlined />} loading={loading}>

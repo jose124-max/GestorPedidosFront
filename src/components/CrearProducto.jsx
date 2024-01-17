@@ -80,7 +80,7 @@ const CrearProducto = () => {
       console.log("Hay imagn?" + imagenP);
       formData.append('imagen_p', imagenP);
 
-      const response = await fetch('http://127.0.0.1:8000/producto/crearcomponente/', {
+      const response = await fetch('http://127.0.0.1:8000/producto/crearproducto/', {
         method: 'POST',
         body: formData,
       });
