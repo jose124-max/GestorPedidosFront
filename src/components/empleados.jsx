@@ -34,7 +34,7 @@ const Empleados = ({ }) => {
 
 
     useEffect(() => {
-        fetch('http://127.0.0.1:8000/sucursal/sucusarleslist/')
+        fetch('https://pedidosbak-production.up.railway.app/sucursal/sucusarleslist/')
             .then((response) => response.json())
             .then((data) => {
                 setSucursales(data.sucursales);
@@ -62,7 +62,7 @@ const Empleados = ({ }) => {
         setSelectedSucursal(value);
 
         if (value !== 'Todas las sucursales') {
-            fetch(`http://127.0.0.1:8000/empleado/listar-empleados/${encodeURIComponent(value)}/`)
+            fetch(`https://pedidosbak-production.up.railway.app/empleado/listar-empleados/${encodeURIComponent(value)}/`)
                 .then((response) => response.json())
                 .then((data) => {
                     setEmpleados(data.empleados);

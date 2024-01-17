@@ -43,7 +43,7 @@ const AdminMenu = () => {
     const handleShow = () => setShow(true);
     const obtenerInformacionEmpresa = async () => {
         try {
-            const respuesta = await fetch('http://127.0.0.1:8000/empresa/infoEmpresa/', {
+            const respuesta = await fetch('https://pedidosbak-production.up.railway.app/empresa/infoEmpresa/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ const AdminMenu = () => {
             console.log(datos.empresa_info);
             setEmpresaInfo(datos.empresa_info);
             setLoading(false);
-            fetch('http://127.0.0.1:8000/sucursal/sucusarleslist/')
+            fetch('https://pedidosbak-production.up.railway.app/sucursal/sucusarleslist/')
                 .then((response) => response.json())
                 .then((data) => {
                     console.log(data.sucursales)
@@ -96,7 +96,7 @@ const AdminMenu = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://127.0.0.1:8000/Login/rol/', {
+                const response = await fetch('https://pedidosbak-production.up.railway.app/Login/rol/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -30,7 +30,7 @@ const TransferContainer = ({onValor}) => {
         const fetchComponentes = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://127.0.0.1:8000/producto/listarcomponentes/');
+                const response = await fetch('https://pedidosbak-production.up.railway.app/producto/listarcomponentes/');
                 if (response.ok) {
                     const data = await response.json();
                     const componentesWithDefaultCosto = data.componentes.map((componente) => ({

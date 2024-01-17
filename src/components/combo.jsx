@@ -43,7 +43,7 @@ const Combos = () => {
 
     const fetchData = async (page) => {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/combos/ver_combos/?page=${page}`);
+            const response = await fetch(`https://pedidosbak-production.up.railway.app/combos/ver_combos/?page=${page}`);
             const data = await response.json();
             setCombos(data.combo);
 

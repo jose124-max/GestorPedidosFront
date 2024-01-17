@@ -13,14 +13,14 @@ const CrearMesa = () => {
         formData.append(key, values[key]);
       });
 
-      const response = await fetch('http://127.0.0.1:8000/Mesas/crear/', {
+      const response = await fetch('https://pedidosbak-production.up.railway.app/Mesas/crear/', {
         method: 'POST',
         body: formData,
       });
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Respuesta del servidor:', data); 
+        console.log('Respuesta del servidor:', data.message); 
 
         // Mostrar mensaje de éxito
         message.success('Mesa creada con éxito');
