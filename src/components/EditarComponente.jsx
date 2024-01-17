@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Modal, message, Form, Input, Select, InputNumber,Drawer } from 'antd';
+import { Table, Button, Modal, message, Form, Input, Select, InputNumber,Drawer,Tag } from 'antd';
 import { Row, Col } from 'react-bootstrap';
 import { EditOutlined } from '@ant-design/icons';
 import CrearComponenteForm from './CrearComponente';
@@ -79,6 +79,14 @@ const EditarComponenteForm = () => {
       title: 'Descripción',
       dataIndex: 'descripcion',
       key: 'descripcion',
+    },
+    {
+      title: 'Categoría',
+      dataIndex: 'id_categoria',
+      key: 'id_categoria',
+      render: (id_categoria) => (
+        <Tag color="blue">{id_categoria ? id_categoria.catnombre : 'Sin categoría'}</Tag>
+      ),
     },
     {
       title: 'Costo',

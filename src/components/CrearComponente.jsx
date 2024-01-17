@@ -1,16 +1,48 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Select, message, InputNumber } from 'antd';
+import { Form, Input, Button, Select, message, InputNumber, notification } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import TransferContainer from './selectcomponent.jsx';  // Importar el nuevo componente
+import { Row, Col } from 'react-bootstrap';
 
 const { Item } = Form;
 const { Option } = Select;
 
 const CrearComponenteForm = () => {
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [unidadesMedida, setUnidadesMedida] = useState([]);
   const [categorias, setCategorias] = useState([]);
+  const [componenteslist, setComponentes] = useState([]);
+  const [agregarDetalle, setagregarDetalle] = useState(false);
+  const [detallecomponente, setdetallecomponente] = useState(false);
+
+  const handleTipoChange = (value) => {
+    setagregarDetalle(value === 'F');
+  };
 
   useEffect(() => {
+    const fetchComponentes = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/producto/listarcomponentes/');
+        if (response.ok) {
+          const data = await response.json();
+          const componentesWithDefaultCosto = data.componentes.map((componente) => ({
+            ...componente,
+            costo: componente.costo !== null ? componente.costo : '0.00',
+          }));
+          setComponentes(componentesWithDefaultCosto);
+        } else {
+          const errorData = await response.json();
+          message.error(errorData.error);
+        }
+      } catch (error) {
+        console.error('Error al cargar los componentes:', error);
+        message.error('Hubo un error al cargar los componentes');
+      } finally {
+        setLoading(false);
+      }
+    };
+
     const fetchCategorias = async () => {
       try {
         const response = await fetch('http://127.0.0.1:8000/producto/listar_categorias/');
@@ -45,42 +77,54 @@ const CrearComponenteForm = () => {
 
     fetchUnidadesMedida();
     fetchCategorias();
+    fetchComponentes();
   }, []);
 
-  const onFinish = async (values) => {
-    setLoading(true);
-    if (values.costo === undefined || values.costo === null || values.costo === '') {
-      values.costo = 0.00;
-    }
+  const savedetalle = async (jsondetalle) => {
+    message.success(jsondetalle);
+    setdetallecomponente(jsondetalle);
+  }
 
+  const onFinish = async (values) => {
     try {
+      const formDataObject = new FormData();
+      if (values.tipo == 'F') {
+        formDataObject.append('detalle_comp', detallecomponente);
+        formDataObject.append('cantidad', values.cantidad);
+      }
+      if (values.descripcion) {
+        formDataObject.append('descripcion', values.descripcion);
+      }
+      formDataObject.append('nombre', values.nombre);
+      formDataObject.append('costo', values.costo);
+      formDataObject.append('tipo', values.tipo);
+      formDataObject.append('id_um', values.id_um);
+      formDataObject.append('id_categoria', values.id_categoria);
       const response = await fetch('http://127.0.0.1:8000/producto/crearcomponente/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
+        body: formDataObject,
       });
 
       const data = await response.json();
-
       if (response.ok) {
-        message.success(data.mensaje);
+        message.success('Se creó el componente con exito');
+        form.resetFields();
       } else {
-        message.error(data.error);
+        message.error('Algo salió mal'+error);
       }
     } catch (error) {
-      message.error('Ocurrió un error al procesar la solicitud');
-    } finally {
-      setLoading(false);
+      message.error('Algo salió mal'+error);
     }
   };
+
+
 
   return (
     <Form
       onFinish={onFinish}
       labelCol={{ span: 8 }}
       wrapperCol={{ span: 16 }}
+      form={form}
     >
       <Item
         label="Nombre"
@@ -106,8 +150,6 @@ const CrearComponenteForm = () => {
           ))}
         </Select>
       </Form.Item>
-
-
       <Item
         label="Costo"
         name="costo"
@@ -118,7 +160,7 @@ const CrearComponenteForm = () => {
       >
         <InputNumber
           step={0.01}
-          formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
           parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
           min={0}
         />
@@ -129,13 +171,37 @@ const CrearComponenteForm = () => {
         name="tipo"
         rules={[{ required: true, message: 'Por favor, seleccione el tipo del componente' }]}
       >
-        <Select>
+        <Select onChange={handleTipoChange}>
           <Option value="N">Normal</Option>
           <Option value="F">Fabricado</Option>
         </Select>
       </Item>
 
-
+      {agregarDetalle && (
+        <Row>
+          <Col md={12}>
+            <Item
+        label="cantidad"
+        name="cantidad"
+        rules={[
+          { required: false },
+          { type: 'number', message: 'Por favor, ingrese un valor numérico válido para el costo' },
+        ]}
+      >
+        <InputNumber
+          step={0.01}
+          formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+          parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+          min={0}
+        />
+      </Item>
+            <h6>Selecciona los artículos que ensamblan tu artículo</h6>
+            <div style={{ border: '1px solid #A4A4A4', padding: '2%', margin: '5%' }}>
+              <TransferContainer onValor={savedetalle} />
+            </div>
+          </Col>
+        </Row>
+      )}
       <Item
         label="Unidades de Medida"
         name="id_um"
